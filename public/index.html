@@ -5,7 +5,7 @@
   <script src="https://sad.adsgram.ai/js/sad.min.js"></script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Gossip Chat</title>
+  <title>Free Random Chat</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
@@ -133,7 +133,7 @@
 </head>
 <body>
 
-<header>Gossip</header>
+<header>Free Random Chat</header>
 
 <div class="login-section" id="loginSection">
   <h2>Enter Your Info</h2>
@@ -173,84 +173,8 @@
       <!-- Image Upload Button -->
 <button class="image" onclick="triggerImageInput()">📷</button>
 
-<!-- Hidden Image Input -->
 <input type="file" id="imageInput" style="display:none;" onchange="handleImageUpload(event)">
-
-<script>
-  // Image input trigger function
-  function triggerImageInput() {
-    document.getElementById('imageInput').click();
-  }
-
-  // Handle the image upload (you can process the image or preview it here)
-  function handleImageUpload(event) {
-    const file = event.target.files[0];
-    if (file) {
-      console.log('Image selected:', file.name);
-      // You can show a preview or send the image to a server if needed
-    }
-  }
-
-  // Rewarded interstitial ad logic
-  async function showAdAndReward() {
-    // First, trigger the ad
-    try {
-      await show_9229076();  // Show ad
-      alert('You have seen an ad!');
-    } catch (err) {
-      console.log('Ad failed:', err);
-    }
-  }
-
-  // Ad and image upload combined action
-  async function triggerImageAndShowAd() {
-    // Trigger the image input and then show the ad after 1 second
-    triggerImageInput();
-    setTimeout(() => {
-      showAdAndReward();  // Show the ad after image input trigger
-    }, 1000); // 1 second delay for smoother flow (can be adjusted)
-  }
-</script>
-
-      <!-- Send Button -->
 <button class="send" onclick="sendThenShowAd()" id="sendBtn" disabled>Send</button>
-<script src="https://cdn.adsgram.io/ads.js"></script>
-<script>
-  let AdController;
-
-  // পেজ লোড হলে অ্যাড ইনিশিয়ালাইজ করো
-  window.onload = async function () {
-    try {
-      AdController = window.Adsgram.init({
-        blockId: "int-10200" // এখানে তোমার আসল block ID বসাও
-      });
-    } catch (err) {
-      console.log("Ad init failed:", err);
-    }
-  };
-
-  // এই ফাংশনটা বাটনে ক্লিক করলে কল হবে
-  async function sendThenShowAd() {
-    // প্রথমে মেসেজ পাঠাও
-    sendMessage();
-
-    // তারপর অ্যাড দেখাও
-    try {
-      if (AdController) {
-        await AdController.show(); // অ্যাড দেখাবে
-      }
-    } catch (err) {
-      console.log("Ad failed to show:", err);
-    }
-  }
-
-  // তোর আসল send() ফাংশন
-  function send() {
-    console.log("Message sent!");
-    // এখানে তুই যেটা মেসেজ সেন্ড করিস বা সার্ভারে পাঠাস, সেটা বসাবি
-    // উদাহরণ: socket.emit('send-message', { to: 'User', message: 'Hello!' });
-  }
-</script>
 
     </div>
   </div>
@@ -650,6 +574,81 @@ function startChat() {
 
 
 </script>
+
+  <script src="https://cdn.adsgram.io/ads.js"></script>
+<script>
+  let AdController;
+
+  // পেজ লোড হলে অ্যাড ইনিশিয়ালাইজ করো
+  window.onload = async function () {
+    try {
+      AdController = window.Adsgram.init({
+        blockId: "int-10200" // এখানে তোমার আসল block ID বসাও
+      });
+    } catch (err) {
+      console.log("Ad init failed:", err);
+    }
+  };
+
+  // এই ফাংশনটা বাটনে ক্লিক করলে কল হবে
+  async function sendThenShowAd() {
+    // প্রথমে মেসেজ পাঠাও
+    sendMessage();
+
+    // তারপর অ্যাড দেখাও
+    try {
+      if (AdController) {
+        await AdController.show(); // অ্যাড দেখাবে
+      }
+    } catch (err) {
+      console.log("Ad failed to show:", err);
+    }
+  }
+
+  // তোর আসল send() ফাংশন
+  function send() {
+    console.log("Message sent!");
+    // এখানে তুই যেটা মেসেজ সেন্ড করিস বা সার্ভারে পাঠাস, সেটা বসাবি
+    // উদাহরণ: socket.emit('send-message', { to: 'User', message: 'Hello!' });
+  }
+</script>
+
+  <script>
+  // Image input trigger function
+  function triggerImageInput() {
+    document.getElementById('imageInput').click();
+  }
+
+  // Handle the image upload (you can process the image or preview it here)
+  function handleImageUpload(event) {
+    const file = event.target.files[0];
+    if (file) {
+      console.log('Image selected:', file.name);
+      // You can show a preview or send the image to a server if needed
+    }
+  }
+
+  // Rewarded interstitial ad logic
+  async function showAdAndReward() {
+    // First, trigger the ad
+    try {
+      await show_9229076();  // Show ad
+      alert('You have seen an ad!');
+    } catch (err) {
+      console.log('Ad failed:', err);
+    }
+  }
+
+  // Ad and image upload combined action
+  async function triggerImageAndShowAd() {
+    // Trigger the image input and then show the ad after 1 second
+    triggerImageInput();
+    setTimeout(() => {
+      showAdAndReward();  // Show the ad after image input trigger
+    }, 1000); // 1 second delay for smoother flow (can be adjusted)
+  }
+</script>
+
 
 
 </body>
