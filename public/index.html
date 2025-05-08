@@ -556,12 +556,9 @@ function startChat() {
   const name = document.getElementById('username').value.trim();
   const age = document.getElementById('age').value.trim();
   const gender = document.getElementById('gender').value;
-  const countryCode = document.getElementById('country').value;
-  const countryName = document.getElementById('country').selectedOptions[0].text;
-  const region = document.getElementById('region').value.trim();
 
-  if (!name || !age || !gender || !countryCode || !region) {
-    alert("Please fill all fields");
+  if (!name || !age || !gender) {
+    alert("Please fill in Name, Age, and Gender.");
     return;
   }
 
@@ -569,9 +566,9 @@ function startChat() {
     name,
     age,
     gender,
-    region,
-    countryCode,
-    countryName,
+    region: "Unknown",
+    countryCode: "unknown",
+    countryName: "Unknown",
     photo: "https://i.pravatar.cc/100?" + Math.random()
   };
 
@@ -580,7 +577,7 @@ function startChat() {
   document.getElementById('loginSection').style.display = 'none';
   document.getElementById('chatContainer').style.display = 'flex';
 
-  chatHeader.innerHTML = `Welcome, ${name}<br/><small>${age} yrs, ${region}, ${countryName}</small>`;
+  chatHeader.innerHTML = `Welcome, ${name}<br/><small>${age} yrs, ${gender}</small>`;
 
   updateBotList();
 }
