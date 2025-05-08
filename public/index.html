@@ -386,11 +386,12 @@ function renderUserList(users) {
   sendBtn.disabled = false;
   chatHeader.innerHTML = `${user.name}<br/><small>${user.gender}, ${user.age} yrs, ${user.region}, ${user.countryName}</small>`;
   renderMessages();
+      document.getElementById('chatSection').classList.remove('hidden');
 });
 
     userList.appendChild(userDiv);
   });
-  document.getElementById('chatSection').classList.remove('hidden');
+ 
 
 }
   document.getElementById("filterAll").addEventListener("click", () => {
