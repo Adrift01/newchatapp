@@ -144,14 +144,10 @@
     <option value="Male">Male</option>
     <option value="Female">Female</option>
   </select>
-  <select id="country">
-    <option value="">Select Country (Optional)</option>
-</select>
-  <input type="text" id="region" placeholder="Your Region" required />
-  <button onclick="show_9229076().then(() => {startChat()
-    
+  <button onclick="show_9229076().then(() => {
+    startChat();
     alert('Welcome to Free random chat');
-})">Login & Enter</button>
+  })">Login & Enter</button>
 </div>
 
 <div class="container" id="chatContainer">
@@ -320,37 +316,33 @@ imageInput.addEventListener('change', () => {
   const socket = io();
 
   function startChat() {
-    const name = document.getElementById('username').value.trim();
-    const age = document.getElementById('age').value.trim();
-    const gender = document.getElementById('gender').value;
-    const countryCode = document.getElementById('country').value;
-    const countryName = document.getElementById('country').selectedOptions[0]?.text || 'Unknown';
-    const region = document.getElementById('region').value.trim();
+  const name = document.getElementById('username').value.trim();
+  const age = document.getElementById('age').value.trim();
+  const gender = document.getElementById('gender').value;
 
-    // Validate only the required fields
-    if (!name || !age || !gender || !region) {
-        alert("Please fill all required fields (Name, Age, Gender, Region).");
-        return;
-    }
+  if (!name || !age || !gender) {
+    alert("Please fill in Name, Age, and Gender.");
+    return;
+  }
 
-    // Allow the user to proceed without selecting a country
-    currentUserInfo = {
-        name,
-        age,
-        gender,
-        region,
-        countryCode: countryCode || 'unknown', // Default to 'unknown' if no country selected
-        countryName,
-        photo: "https://i.pravatar.cc/100?" + Math.random()
-    };
+  currentUserInfo = {
+    name,
+    age,
+    gender,
+    region: "Unknown",
+    countryCode: "unknown",
+    countryName: "Unknown",
+    photo: "https://i.pravatar.cc/100?" + Math.random()
+  };
 
-    socket.emit('new-user', currentUserInfo);
+  socket.emit('new-user', currentUserInfo);
 
-    document.getElementById('loginSection').style.display = 'none';
-    document.getElementById('chatContainer').style.display = 'flex';
+  document.getElementById('loginSection').style.display = 'none';
+  document.getElementById('chatContainer').style.display = 'flex';
 
-    chatHeader.innerHTML = `Welcome, ${name}<br/><small>${age} yrs, ${region}, ${countryName}</small>`;
+  chatHeader.innerHTML = `Welcome, ${name}<br/><small>${age} yrs, ${gender}</small>`;
 }
+
 
 
 
