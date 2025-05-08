@@ -405,7 +405,8 @@ document.getElementById("filterFemale").addEventListener("click", () => {
   messageStore[from].push(message);
 
   if (activeUser === from) {
-    appendMessage('Stranger', message, false);
+  renderMessages(); // Renders all messages, including img:
+}
   } else {
     // ✅ Add blue dot for unread message
     const userElement = [...document.querySelectorAll('.user')].find(
