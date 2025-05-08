@@ -321,37 +321,6 @@ imageInput.addEventListener('change', () => {
 <script>
   const socket = io();
 
-  function startChat() {
-  const name = document.getElementById('username').value.trim();
-  const age = document.getElementById('age').value.trim();
-  const gender = document.getElementById('gender').value;
-
-  if (!name || !age || !gender) {
-    alert("Please fill in Name, Age, and Gender.");
-    return;
-  }
-
-  currentUserInfo = {
-    name,
-    age,
-    gender,
-    region: "Unknown",
-    countryCode: "unknown",
-    countryName: "Unknown",
-    photo: "https://i.pravatar.cc/100?" + Math.random()
-  };
-
-  socket.emit('new-user', currentUserInfo);
-
-  document.getElementById('loginSection').style.display = 'none';
-  document.getElementById('chatContainer').style.display = 'flex';
-
-  chatHeader.innerHTML = `Welcome, ${name}<br/><small>${age} yrs, ${gender}</small>`;
-}
-
-
-
-
 socket.on('user-list', (users) => {
   // Exclude the current user from the list
   allUsers = users.filter(user => user.name !== currentUserInfo.name);
