@@ -124,9 +124,6 @@
   display: inline-block;
   margin-left: 8px;
 }
-.hidden {
-  display: none !important;
-}
 
 }
 
@@ -168,26 +165,24 @@
     <div class="user-list" id="userList"></div>
   </div>
 
-<div class="chat-section hidden" id="chatSection">
-  <div class="chat-header" id="chatHeader">
-    <span id="chatTitle">Select a user<br/><small></small></span>
-    <button onclick="closeChat()" style="float:right; background:none; border:none; color:white; font-size:20px; cursor:pointer;">❌</button>
-  </div>
-  
-  <div class="chat-body" id="chatBody"></div>
-  
-  <div class="chat-input">
-    <input type="text" id="messageInput" placeholder="Type your message..." disabled />
-    
-    <input type="file" id="imageInput" accept="image/*" style="display: none" />
-    
-    <button class="emoji" onclick="addEmoji()">😊</button>
-    <button class="gif" onclick="sendGif()">GIF</button>
-    <button class="image" onclick="triggerImageInput()">📷</button>
-    
-    <button class="send" onclick="sendThenShowAd()" id="sendBtn" disabled>Send</button>
-  </div>
+  <div class="chat-section">
+    <div class="chat-header" id="chatHeader">Select a user<br/><small></small></div>
+    <div class="chat-body" id="chatBody"></div>
+    <div class="chat-input">
+      <input type="text" id="messageInput" placeholder="Type your message..." disabled />
+      <input type="file" id="imageInput" accept="image/*" style="display: none" />
+      <button class="emoji" onclick="addEmoji()">😊</button>
+      <button class="gif" onclick="sendGif()">GIF</button>
+      <!-- Image Upload Button -->
+<button class="image" onclick="triggerImageInput()">📷</button>
+
+<input type="file" id="imageInput" style="display:none;" onchange="handleImageUpload(event)">
+<button class="send" onclick="sendThenShowAd()" id="sendBtn" disabled>Send</button>
+
 </div>
+
+  </div>
+
 
 </div>
 
@@ -379,30 +374,16 @@ function renderUserList(users) {
       <img src="https://flagcdn.com/${user.countryCode}.svg" class="flag" />
     `;
   userDiv.addEventListener('click', () => {
-  // Remove "active" class from all users
   document.querySelectorAll('.user').forEach(u => u.classList.remove('active'));
-
-  // Mark clicked user as active
   userDiv.classList.add('active');
 
-  // Remove unread blue dot if present
+  // ✅ Remove unread blue dot if present
   userDiv.classList.remove('unread');
 
-  // Set active user and enable chat input
   activeUser = user.name;
   messageInput.disabled = false;
   sendBtn.disabled = false;
-
-  // ✅ Only update the text inside #chatTitle (not entire header)
-  document.getElementById("chatTitle").innerHTML = `
-    ${user.name}<br/>
-    <small>${user.gender}, ${user.age} yrs, ${user.region}, ${user.countryName}</small>
-  `;
-
-  // ✅ Show chat section
-  document.getElementById('chatSection').classList.remove('hidden');
-
-  // Load previous messages if any
+  chatHeader.innerHTML = `${user.name}<br/><small>${user.gender}, ${user.age} yrs, ${user.region}, ${user.countryName}</small>`;
   renderMessages();
 });
 
@@ -689,15 +670,7 @@ function startChat() {
   }
     
 </script>
-  <script>
-    function closeChat() {
-  document.getElementById('chatSection').classList.add('hidden');
-  activeUser = null;
-  messageInput.disabled = true;
-  sendBtn.disabled = true;
-  document.getElementById("chatTitle").innerHTML = `Select a user<br/><small></small>`;
-}
-  </script>
+  
 
 
 
