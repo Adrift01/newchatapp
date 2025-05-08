@@ -157,8 +157,10 @@
   <button id="filterAll">🌐 All</button>
   <button id="filterMale">👨‍🦱 Male</button>
   <button id="filterFemale">👩 Female</button>
+  <button id="filterInbox">📥 Inbox</button>
 </div>
     <div class="user-list" id="userList"></div>
+    
   </div>
 
   <div class="chat-section">
@@ -190,13 +192,15 @@
   const messageInput = document.getElementById('messageInput');
   const sendBtn = document.getElementById('sendBtn');
   const imageInput = document.getElementById('imageInput');
-
+  const filterInboxButton = document.getElementById("filterInbox");
+  
+  
   let allUsers = [];
-
   let currentUserInfo = {};
   let activeUser = null;
   const messageStore = {};
-
+  let unreadMessages = {};
+  
   async function loadCountries() {
     const res = await fetch("https://restcountries.com/v3.1/all");
     const countries = await res.json();
@@ -397,6 +401,90 @@ document.getElementById("filterFemale").addEventListener("click", () => {
   renderUserList(allUsers.filter(user => user.gender === "Female"));
 });
 
+  // ata new delete korle akhan theke korbo
+  function handleReceivedMessage(from, message) {
+    if (!messageStore[from]) {
+      messageStore[from] = [];
+    }
+
+    // Store message
+    messageStore[from].push(message);
+
+    // If the user is not active and hasn't seen the message yet, mark as unread
+    if (activeUser !== from) {
+      unreadMessages[from] = true; // Mark this user as having unread messages
+    }
+
+    // Render messages (this will show them if activeUser matches the from)
+    if (activeUser === from) {
+      renderMessages();
+    }
+    renderUserList(allUsers); // Re-render the user list to update unread message indicator
+  }
+
+  socket.on('receive-message', ({ from, message }) => {
+    handleReceivedMessage(from, message);
+  });
+
+  // Render the user list (including unread message indicator)
+  function renderUserList(users) {
+    userList.innerHTML = ''; // Clear the list
+    users.forEach(user => {
+      const userDiv = document.createElement('div');
+      userDiv.className = `user ${user.gender.toLowerCase()}`;
+      userDiv.dataset.username = user.name;
+      
+      // Check if the user has unread messages
+      if (unreadMessages[user.name]) {
+        userDiv.classList.add('unread'); // Add unread class
+      }
+
+      userDiv.innerHTML = `
+        <div class="user-info">
+          <strong>${user.name}</strong>
+          <small>${user.age} yrs, ${user.region}, ${user.countryName}</small>
+        </div>
+        <img src="https://flagcdn.com/${user.countryCode}.svg" class="flag" />
+      `;
+      
+      userDiv.addEventListener('click', () => {
+        document.querySelectorAll('.user').forEach(u => u.classList.remove('active'));
+        userDiv.classList.add('active');
+        activeUser = user.name;
+
+        // When the user clicks the user, remove the unread class and reset unread status
+        unreadMessages[user.name] = false; // No unread message anymore for this user
+        renderMessages(); // Show all the messages for this user
+        messageInput.disabled = false;
+        sendBtn.disabled = false;
+        chatHeader.innerHTML = `${user.name}<br/><small>${user.gender}, ${user.age} yrs, ${user.region}, ${user.countryName}</small>`;
+      });
+
+      userList.appendChild(userDiv);
+    });
+  }
+
+  // Filter by Inbox (only users with unread messages)
+  filterInboxButton.addEventListener('click', () => {
+    const inboxUsers = allUsers.filter(user => unreadMessages[user.name]);
+    renderUserList(inboxUsers);
+  });
+
+  // Filter all users
+  document.getElementById("filterAll").addEventListener("click", () => {
+    renderUserList(allUsers);
+  });
+
+  // Filter male users
+  document.getElementById("filterMale").addEventListener("click", () => {
+    renderUserList(allUsers.filter(user => user.gender === "Male"));
+  });
+
+  // Filter female users
+  document.getElementById("filterFemale").addEventListener("click", () => {
+    renderUserList(allUsers.filter(user => user.gender === "Female"));
+  }); // ai porjonto
+  
 
  socket.on('receive-message', ({ from, message }) => {
   if (!messageStore[from]) {
