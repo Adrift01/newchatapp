@@ -124,6 +124,9 @@
   display: inline-block;
   margin-left: 8px;
 }
+.hidden {
+  display: none !important;
+}
 
 }
 
@@ -165,22 +168,23 @@
     <div class="user-list" id="userList"></div>
   </div>
 
-  <div class="chat-section">
-    <div class="chat-header" id="chatHeader">Select a user<br/><small></small></div>
-    <div class="chat-body" id="chatBody"></div>
-    <div class="chat-input">
-      <input type="text" id="messageInput" placeholder="Type your message..." disabled />
-      <input type="file" id="imageInput" accept="image/*" style="display: none" />
-      <button class="emoji" onclick="addEmoji()">😊</button>
-      <button class="gif" onclick="sendGif()">GIF</button>
-      <!-- Image Upload Button -->
-<button class="image" onclick="triggerImageInput()">📷</button>
-
-<input type="file" id="imageInput" style="display:none;" onchange="handleImageUpload(event)">
-<button class="send" onclick="sendThenShowAd()" id="sendBtn" disabled>Send</button>
-
-    </div>
+<div class="chat-section hidden" id="chatSection">
+  <div class="chat-header" id="chatHeader">
+    <button onclick="closeChat()" style="float:right; background:none; border:none; color:white; font-size:20px; cursor:pointer;">❌</button>
+    Select a user<br/><small></small>
   </div>
+  <div class="chat-body" id="chatBody"></div>
+  <div class="chat-input">
+    <input type="text" id="messageInput" placeholder="Type your message..." disabled />
+    <input type="file" id="imageInput" accept="image/*" style="display: none" />
+    <button class="emoji" onclick="addEmoji()">😊</button>
+    <button class="gif" onclick="sendGif()">GIF</button>
+    <button class="image" onclick="triggerImageInput()">📷</button>
+    <input type="file" id="imageInput" style="display:none;" onchange="handleImageUpload(event)">
+    <button class="send" onclick="sendThenShowAd()" id="sendBtn" disabled>Send</button>
+  </div>
+</div>
+
 </div>
 
 <script>
@@ -386,6 +390,8 @@ function renderUserList(users) {
 
     userList.appendChild(userDiv);
   });
+  document.getElementById('chatSection').classList.remove('hidden');
+
 }
   document.getElementById("filterAll").addEventListener("click", () => {
   renderUserList(allUsers);
@@ -662,7 +668,17 @@ function startChat() {
       showAdAndReward();  // Show the ad after image input trigger
     }, 1000); // 1 second delay for smoother flow (can be adjusted)
   }
+    
 </script>
+  <script>
+    function closeChat() {
+  document.getElementById('chatSection').classList.add('hidden');
+  activeUser = null;
+  messageInput.disabled = true;
+  sendBtn.disabled = true;
+}
+
+  </script>
 
 
 
