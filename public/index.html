@@ -124,6 +124,34 @@
   display: inline-block;
   margin-left: 8px;
 }
+      .video-call-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #ff9800, #ff5722);
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  font-size: 14px;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: background 0.3s, box-shadow 0.3s;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.video-call-btn:hover {
+  background: linear-gradient(135deg, #ffa726, #ff7043);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.15);
+}
+
+.video-call-btn .icon {
+  font-size: 16px;
+}
+
+.video-call-btn .text {
+  font-weight: 600;
+}
+
 
 }
 
@@ -171,13 +199,16 @@
     </div>
     <button 
   id="videoCallBtn"
+  class="video-call-btn"
   onclick="show_9229076().then(() => {
     window.open('https://www.febspot.com/auth/google/?ref=725136', '_blank');
     alert('Sign in with Gmail to start video chat');
-  })" 
-  style="display:none; background-color: #ff9800; color: white; border: none; padding: 6px 12px; border-radius: 5px; cursor: pointer; font-size: 14px;">
-  📹 Video Call
+  })"
+  style="display: none;"
+>
+  <span class="icon">📹</span> <span class="text">Start Video Call</span>
 </button>
+
   </div>
 </div>
 
