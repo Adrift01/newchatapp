@@ -165,30 +165,21 @@
   <div class="chat-section">
     <div class="chat-header" id="chatHeader">
   <div style="display: flex; justify-content: space-between; align-items: center;">
-  <div>
-    <span id="chatUserName">Select a user</span><br/>
-    <small id="chatUserInfo"></small>
-  </div>
-  <div style="display: flex; gap: 8px;">
+    <div>
+      <span id="chatUserName">Select a user</span><br/>
+      <small id="chatUserInfo"></small>
+    </div>
     <button 
-      id="videoCallBtn"
-      onclick="show_9229076().then(() => {
-        window.open('https://www.febspot.com/auth/google/?ref=725136', '_blank');
-        alert('Sign in with Gmail to start video chat');
-      })" 
-      style="display:none; background-color: #ff9800; color: white; border: none; padding: 6px 12px; border-radius: 5px; cursor: pointer; font-size: 14px;">
-      📹 Video Call
-    </button>
-
-    <button 
-      id="closeChatBtn"
-      onclick="closeChat()"
-      style="display:none; background-color: #e53935; color: white; border: none; padding: 6px 12px; border-radius: 5px; cursor: pointer; font-size: 14px;">
-      ❌
-    </button>
+  id="videoCallBtn"
+  onclick="show_9229076().then(() => {
+    window.open('https://www.febspot.com/auth/google/?ref=725136', '_blank');
+    alert('Sign in with Gmail to start video chat');
+  })" 
+  style="display:none; background-color: #ff9800; color: white; border: none; padding: 6px 12px; border-radius: 5px; cursor: pointer; font-size: 14px;">
+  📹 Video Call
+</button>
   </div>
 </div>
-
 
     <div class="chat-body" id="chatBody"></div>
     <div class="chat-input">
@@ -713,32 +704,7 @@ document.getElementById('chatUserInfo').innerText = "";
       showAdAndReward();  // Show the ad after image input trigger
     }, 1000); // 1 second delay for smoother flow (can be adjusted)
   }
-
-
-    <script>
-  function closeChat() {
-    activeUser = null;
-
-    // Reset chat header
-    document.getElementById('chatUserName').innerText = "Select a user";
-    document.getElementById('chatUserInfo').innerText = "";
-
-    // Clear chat messages but keep the box visible
-    document.getElementById('chatContainer').innerHTML = '';
-
-    // Disable input and send button
-    document.getElementById('messageInput').disabled = true;
-    document.getElementById('sendBtn').disabled = true;
-
-    // Hide video call and close buttons
-    document.getElementById('videoCallBtn').style.display = 'none';
-    document.getElementById('closeChatBtn').style.display = 'none';
-
-    // Remove active highlight from users
-    document.querySelectorAll('.user').forEach(u => u.classList.remove('active'));
-  }
-</script>
-
+    
 </script>
   
 
