@@ -621,7 +621,9 @@ function startChat() {
   document.getElementById('loginSection').style.display = 'none';
   document.getElementById('chatContainer').style.display = 'flex';
 
-  chatHeader.innerHTML = `Welcome, ${name}<br/><small>${age} yrs, ${gender}</small>`;
+  document.getElementById('chatUserName').innerText = user.name;
+document.getElementById('chatUserInfo').innerText = `${user.gender}, ${user.age} yrs, ${user.region}, ${user.countryName}`;
+
 
   updateBotList();
 }
