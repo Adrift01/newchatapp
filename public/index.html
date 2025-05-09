@@ -169,7 +169,7 @@
     <span id="chatUserName">Select a user</span><br/>
     <small id="chatUserInfo"></small>
   </div>
-  <div style="display: flex; gap: 6px; align-items: center;">
+  <div style="display: flex; gap: 8px;">
     <button 
       id="videoCallBtn"
       onclick="show_9229076().then(() => {
@@ -179,15 +179,15 @@
       style="display:none; background-color: #ff9800; color: white; border: none; padding: 6px 12px; border-radius: 5px; cursor: pointer; font-size: 14px;">
       📹 Video Call
     </button>
+
     <button 
       id="closeChatBtn"
       onclick="closeChat()"
-      style="display: none; background-color: #f44336; color: white; border: none; padding: 6px 10px; border-radius: 5px; cursor: pointer; font-size: 14px;">
+      style="display:none; background-color: #e53935; color: white; border: none; padding: 6px 12px; border-radius: 5px; cursor: pointer; font-size: 14px;">
       ❌
     </button>
   </div>
 </div>
-
 
 
     <div class="chat-body" id="chatBody"></div>
@@ -389,7 +389,6 @@ function renderUserList(users) {
       document.getElementById('chatUserName').innerText = user.name;
       document.getElementById('chatUserInfo').innerText = `${user.gender}, ${user.age} yrs, ${user.region}, ${user.countryName}`;
       document.getElementById('videoCallBtn').style.display = 'inline-block';
-      document.getElementById('closeChatBtn').style.display = 'inline-block';
 
       renderMessages();
     });
@@ -714,22 +713,32 @@ document.getElementById('chatUserInfo').innerText = "";
       showAdAndReward();  // Show the ad after image input trigger
     }, 1000); // 1 second delay for smoother flow (can be adjusted)
   }
-    
-</script>
-  <script>
-    function closeChat() {
-  activeUser = null;
-  document.getElementById('chatUserName').innerText = "Select a user";
-  document.getElementById('chatUserInfo').innerText = "";
-  document.getElementById('chatContainer').style.display = 'flex';
-  messageInput.disabled = true;
-  sendBtn.disabled = true;
-  document.getElementById('videoCallBtn').style.display = 'none';
-  document.getElementById('closeChatBtn').style.display = 'none';
 
-  // Remove active class from all user items
-  document.querySelectorAll('.user').forEach(u => u.classList.remove('active'));
-}
+
+    <script>
+  function closeChat() {
+    activeUser = null;
+
+    // Reset chat header
+    document.getElementById('chatUserName').innerText = "Select a user";
+    document.getElementById('chatUserInfo').innerText = "";
+
+    // Clear chat messages but keep the box visible
+    document.getElementById('chatContainer').innerHTML = '';
+
+    // Disable input and send button
+    document.getElementById('messageInput').disabled = true;
+    document.getElementById('sendBtn').disabled = true;
+
+    // Hide video call and close buttons
+    document.getElementById('videoCallBtn').style.display = 'none';
+    document.getElementById('closeChatBtn').style.display = 'none';
+
+    // Remove active highlight from users
+    document.querySelectorAll('.user').forEach(u => u.classList.remove('active'));
+  }
+</script>
+
 </script>
   
 
