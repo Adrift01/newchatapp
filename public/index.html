@@ -341,11 +341,18 @@ socket.on('user-list', (users) => {
 });
 
 function renderUserList(users) {
-  userList.innerHTML = '';
+  userList.innerHTML = ''; // Clear the list first
+
   users.forEach(user => {
     const userDiv = document.createElement('div');
     userDiv.className = `user ${user.gender.toLowerCase()}`;
     userDiv.dataset.username = user.name;
+
+    // ✅ Add "unread" dot if there's an unread message
+    if (unreadMessages[user.name]) {
+      userDiv.classList.add('unread');
+    }
+
     userDiv.innerHTML = `
       <div class="user-info">
         <strong>${user.name}</strong>
@@ -353,30 +360,32 @@ function renderUserList(users) {
       </div>
       <img src="https://flagcdn.com/${user.countryCode}.svg" class="flag" />
     `;
-  userDiv.addEventListener('click', () => {
-  document.querySelectorAll('.user').forEach(u => u.classList.remove('active'));
-  userDiv.classList.add('active');
 
-  // ✅ Remove unread blue dot if present
-  userDiv.classList.remove('unread');
-unreadMessages[user.name] = false;
-updateInboxBadge(); // ✅ Clear badge when read
+    // ✅ When user is clicked
+    userDiv.addEventListener('click', () => {
+      // Remove "active" class from all
+      document.querySelectorAll('.user').forEach(u => u.classList.remove('active'));
+      userDiv.classList.add('active');
 
-  activeUser = user.name;
-  messageInput.disabled = false;
-  sendBtn.disabled = false;
-  document.getElementById('chatUserName').innerText = user.name;
-document.getElementById('chatUserInfo').innerText = `${user.gender}, ${user.age} yrs, ${user.region}, ${user.countryName}`;
+      // ✅ Reset unread status
+      userDiv.classList.remove('unread');
+      unreadMessages[user.name] = false;
+      updateInboxBadge();
 
-  renderMessages();
-});
+      activeUser = user.name;
+      messageInput.disabled = false;
+      sendBtn.disabled = false;
 
+      document.getElementById('chatUserName').innerText = user.name;
+      document.getElementById('chatUserInfo').innerText = `${user.gender}, ${user.age} yrs, ${user.region}, ${user.countryName}`;
+
+      renderMessages();
+    });
 
     userList.appendChild(userDiv);
   });
- 
-
 }
+
   document.getElementById("filterAll").addEventListener("click", () => {
   renderUserList(allUsers);
 });
@@ -416,43 +425,7 @@ document.getElementById("filterFemale").addEventListener("click", () => {
   });
 
   // Render the user list (including unread message indicator)
-  function renderUserList(users) {
-    userList.innerHTML = ''; // Clear the list
-    users.forEach(user => {
-      const userDiv = document.createElement('div');
-      userDiv.className = `user ${user.gender.toLowerCase()}`;
-      userDiv.dataset.username = user.name;
-      
-      // Check if the user has unread messages
-      if (unreadMessages[user.name]) {
-        userDiv.classList.add('unread'); // Add unread class
-      }
-
-      userDiv.innerHTML = `
-        <div class="user-info">
-          <strong>${user.name}</strong>
-          <small>${user.age} yrs, ${user.region}, ${user.countryName}</small>
-        </div>
-        <img src="https://flagcdn.com/${user.countryCode}.svg" class="flag" />
-      `;
-      
-      userDiv.addEventListener('click', () => {
-        document.querySelectorAll('.user').forEach(u => u.classList.remove('active'));
-        userDiv.classList.add('active');
-        activeUser = user.name;
-
-        // When the user clicks the user, remove the unread class and reset unread status
-        unreadMessages[user.name] = false; // No unread message anymore for this user
-        renderMessages(); // Show all the messages for this user
-        messageInput.disabled = false;
-        sendBtn.disabled = false;
-        document.getElementById('chatUserName').innerText = user.name;
-document.getElementById('chatUserInfo').innerText = `${user.gender}, ${user.age} yrs, ${user.region}, ${user.countryName}`;
-      });
-
-      userList.appendChild(userDiv);
-    });
-  }
+  
 
   // Filter by Inbox (only users with unread messages)
   filterInboxButton.addEventListener('click', () => {
