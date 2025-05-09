@@ -446,7 +446,8 @@ document.getElementById("filterFemale").addEventListener("click", () => {
         renderMessages(); // Show all the messages for this user
         messageInput.disabled = false;
         sendBtn.disabled = false;
-        chatHeader.innerHTML = `${user.name}<br/><small>${user.gender}, ${user.age} yrs, ${user.region}, ${user.countryName}</small>`;
+        document.getElementById('chatUserName').innerText = user.name;
+document.getElementById('chatUserInfo').innerText = `${user.gender}, ${user.age} yrs, ${user.region}, ${user.countryName}`;
       });
 
       userList.appendChild(userDiv);
