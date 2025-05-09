@@ -170,11 +170,12 @@
       <small id="chatUserInfo"></small>
     </div>
     <button 
+  id="videoCallBtn"
   onclick="show_9229076().then(() => {
     window.open('https://www.febspot.com/auth/google/?ref=725136', '_blank');
     alert('Sign in with Gmail to start video chat');
   })" 
-  style="background-color: #ff9800; color: white; border: none; padding: 6px 12px; border-radius: 5px; cursor: pointer; font-size: 14px;">
+  style="display:none; background-color: #ff9800; color: white; border: none; padding: 6px 12px; border-radius: 5px; cursor: pointer; font-size: 14px;">
   📹 Video Call
 </button>
   </div>
@@ -378,6 +379,7 @@ function renderUserList(users) {
 
       document.getElementById('chatUserName').innerText = user.name;
       document.getElementById('chatUserInfo').innerText = `${user.gender}, ${user.age} yrs, ${user.region}, ${user.countryName}`;
+      document.getElementById('videoCallBtn').style.display = 'inline-block';
 
       renderMessages();
     });
