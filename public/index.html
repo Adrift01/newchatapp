@@ -169,24 +169,23 @@
     <span id="chatUserName">Select a user</span><br/>
     <small id="chatUserInfo"></small>
   </div>
-  <div style="display: flex; gap: 6px; align-items: center;">
-    <button 
-      id="videoCallBtn"
-      onclick="show_9229076().then(() => {
-        window.open('https://www.febspot.com/auth/google/?ref=725136', '_blank');
-        alert('Sign in with Gmail to start video chat');
-      })" 
-      style="display:none; background-color: #ff9800; color: white; border: none; padding: 6px 12px; border-radius: 5px; cursor: pointer; font-size: 14px;">
-      📹 Video Call
-    </button>
+  <button 
+    id="videoCallBtn"
+    onclick="show_9229076().then(() => {
+      window.open('https://www.febspot.com/auth/google/?ref=725136', '_blank');
+      alert('Sign in with Gmail to start video chat');
+    })" 
+    style="display:none; background-color: #ff9800; color: white; border: none; padding: 6px 12px; border-radius: 5px; cursor: pointer; font-size: 14px;">
+    📹 Video Call
+  </button>
     <button 
       id="closeChatBtn"
       onclick="closeChat()"
       style="display: none; background-color: #f44336; color: white; border: none; padding: 6px 10px; border-radius: 5px; cursor: pointer; font-size: 14px;">
       ❌
     </button>
-  </div>
 </div>
+
 
     <div class="chat-body" id="chatBody"></div>
     <div class="chat-input">
