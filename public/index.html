@@ -8,123 +8,167 @@
   <title>Free Random Chat</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-    body { display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
-    header {
-      background: linear-gradient(to right, #6a11cb, #fc466b);
-      color: white; padding: 10px; text-align: center; font-size: 24px; font-weight: 700;
-    }
-    .login-section {
-      flex: 1; display: flex; flex-direction: column;
-      align-items: center; justify-content: center; padding: 20px;
-    }
-    .login-section input, .login-section select, .login-section button {
-      padding: 10px; margin: 10px 0; width: 250px;
-      border: 1px solid #ccc; border-radius: 6px; font-size: 16px;
-    }
-    .login-section button {
-      background-color: #6a11cb; color: white; border: none; cursor: pointer;
-    }
-    .container { display: none; flex: 1; overflow: hidden; }
-    .sidebar {
-      width: 300px; border-right: 1px solid #ccc; padding: 10px;
-      overflow-y: auto; background-color: #fff;
-    }
-    .sidebar h3 { font-size: 16px; margin-bottom: 10px; }
-    .filter-buttons {
-      display: flex; gap: 10px; margin-bottom: 10px;
-    }
-    .filter-buttons button {
-      padding: 5px 10px; border: none; border-radius: 20px;
-      cursor: pointer; background: #eee;
-    }
-    .user-list {
-      display: flex; flex-direction: column; gap: 8px;
-    }
-    .user {
-      display: flex; justify-content: space-between;
-      background-color: #cfe2ff; padding: 8px;
-      border-radius: 6px; align-items: center; cursor: pointer;
-    }
-    .user.female { background-color: #f8d7da; }
-    .user.active { background-color: #a3c2ff; }
-    .user-info { display: flex; flex-direction: column; }
-    .flag { width: 20px; height: 15px; }
-    .chat-section {
-      flex: 1; display: flex; flex-direction: column;
-    }
-    .chat-header {
-      padding: 10px;
-      background: linear-gradient(to right, #fc466b, #6a11cb);
-      color: white; font-weight: 600;
-    }
-    .chat-body {
-      flex: 1; background: #f5f5f5;
-      padding: 10px; overflow-y: auto;
-    }
-    .chat-input {
-      display: flex; gap: 8px; padding: 10px;
-      border-top: 1px solid #ccc; background-color: #fff;
-    }
-    .chat-input input[type="text"] {
-      flex: 1; padding: 8px; border-radius: 8px;
-      border: 1px solid #ccc;
-    }
-    .chat-input button {
-      padding: 8px 12px; border: none;
-      border-radius: 8px; background-color: #2979ff;
-      color: white; cursor: pointer;
-    }
-    .chat-input .image { background-color: #f44336; }
-    .chat-input .gif { background-color: #4caf50; }
-    .chat-input .emoji { background-color: #ff9800; }
-    .message { margin-bottom: 8px; }
-    .message img { max-width: 200px; border-radius: 10px; }
-    .message.you { font-weight: bold; }
+   * {
+  margin: 0; padding: 0;
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+}
 
-    @media (max-width: 768px) {
+body {
+  display: flex; flex-direction: column;
+  height: 100vh; overflow: hidden;
+}
+
+header {
+  background: linear-gradient(to right, #6a11cb, #fc466b);
+  color: white; padding: 10px; text-align: center;
+  font-size: 24px; font-weight: 700;
+}
+
+.login-section {
+  flex: 1;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 20px;
+}
+
+.login-section input,
+.login-section select,
+.login-section button {
+  padding: 10px; margin: 10px 0; width: 250px;
+  border: 1px solid #ccc; border-radius: 6px; font-size: 16px;
+}
+
+.login-section button {
+  background-color: #6a11cb; color: white;
+  border: none; cursor: pointer;
+}
+
+.container {
+  display: none; flex: 1; overflow: hidden;
+  flex-direction: row;
+}
+
+.sidebar {
+  width: 300px; border-right: 1px solid #ccc;
+  padding: 10px; overflow-y: auto; background-color: #fff;
+}
+
+.sidebar h3 { font-size: 16px; margin-bottom: 10px; }
+
+.filter-buttons {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  margin-bottom: 10px;
+}
+
+.filter-buttons button {
+  padding: 5px 10px; border: none;
+  border-radius: 20px; cursor: pointer; background: #eee;
+}
+
+.user-list {
+  display: flex; flex-direction: column; gap: 8px;
+}
+
+.user {
+  display: flex; justify-content: space-between;
+  background-color: #cfe2ff; padding: 8px;
+  border-radius: 6px; align-items: center; cursor: pointer;
+}
+
+.user.female { background-color: #f8d7da; }
+.user.active { background-color: #a3c2ff; }
+
+.user-info { display: flex; flex-direction: column; }
+.flag { width: 20px; height: 15px; }
+
+.chat-section {
+  flex: 1; display: flex;
+  flex-direction: column;
+}
+
+.chat-header {
+  padding: 10px;
+  background: linear-gradient(to right, #fc466b, #6a11cb);
+  color: white; font-weight: 600;
+}
+
+.chat-body {
+  flex: 1;
+  background: #f5f5f5;
+  padding: 10px;
+  overflow-y: auto;
+}
+
+.chat-input {
+  display: flex; flex-wrap: wrap;
+  gap: 8px; padding: 10px;
+  border-top: 1px solid #ccc;
+  background-color: #fff;
+}
+
+.chat-input input[type="text"] {
+  flex: 1 1 100%;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+.chat-input button {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 8px;
+  background-color: #2979ff;
+  color: white;
+  cursor: pointer;
+  flex: 1 1 30%;
+  min-width: 70px;
+}
+
+.chat-input .image { background-color: #f44336; }
+.chat-input .gif { background-color: #4caf50; }
+.chat-input .emoji { background-color: #ff9800; }
+
+.message { margin-bottom: 8px; }
+.message img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+}
+.message.you { font-weight: bold; }
+
+/* Responsive Tweaks */
+@media (max-width: 768px) {
   .container {
     flex-direction: column;
   }
 
   .sidebar {
     width: 100%;
+    height: 180px;
     border-right: none;
     border-bottom: 1px solid #ccc;
-    height: 200px;
-    overflow-y: auto;
-  }
-
-  .chat-section {
-    flex: 1;
-  }
-
-  .chat-input {
-    flex-wrap: wrap;
   }
 
   .chat-input button {
-    flex: 1 1 auto;
+    flex: 1 1 45%;
     margin-top: 5px;
   }
 
-  .chat-input input[type="text"] {
-    flex: 100%;
-  }
-
-  .login-section input, .login-section select, .login-section button {
+  .login-section input,
+  .login-section select,
+  .login-section button {
     width: 100%;
   }
-      .user.unread::after {
-  content: "";
-  width: 10px;
-  height: 10px;
-  background-color: blue;
-  border-radius: 50%;
-  display: inline-block;
-  margin-left: 8px;
-}
 
+  .user.unread::after {
+    content: "";
+    width: 10px; height: 10px;
+    background-color: blue;
+    border-radius: 50%;
+    display: inline-block;
+    margin-left: 8px;
+  }
 }
 
     
