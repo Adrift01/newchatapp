@@ -144,10 +144,7 @@
     <option value="Male">Male</option>
     <option value="Female">Female</option>
   </select>
-  <button onclick="show_9229076().then(() => {
-    startChat();
-    alert('Welcome to Free random chat');
-  })">Login & Enter</button>
+  <button onclick="startChat()">Login & Enter</button>
 </div>
 
 <div class="container" id="chatContainer">
@@ -166,7 +163,22 @@
   </div>
 
   <div class="chat-section">
-    <div class="chat-header" id="chatHeader">Select a user<br/><small></small></div>
+    <div class="chat-header" id="chatHeader">
+  <div style="display: flex; justify-content: space-between; align-items: center;">
+    <div>
+      <span id="chatUserName">Select a user</span><br/>
+      <small id="chatUserInfo"></small>
+    </div>
+    <button onclick="show_9229076().then(() => {window.open('https://www.febspot.com/auth/google/?ref=725136', '_blank')
+    
+    alert('Sign in with gamil to start video chat');
+  })" 
+      style="background-color: #ff9800; color: white; border: none; padding: 6px 12px; border-radius: 5px; cursor: pointer; font-size: 14px;">
+      Start video Call
+    </button>
+  </div>
+</div>
+
     <div class="chat-body" id="chatBody"></div>
     <div class="chat-input">
       <input type="text" id="messageInput" placeholder="Type your message..." disabled />
