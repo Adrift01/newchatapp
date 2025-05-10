@@ -735,6 +735,7 @@ function startChat() {
 
   socket.emit('new-user', currentUserInfo);
 
+  // Hide the login section and show the sidebar
   document.getElementById('loginSection').style.display = 'none';
   document.getElementById('sidebar').style.display = 'block';       // Only sidebar visible
   document.getElementById('chatSection').style.display = 'none';    // Chat section hidden
@@ -742,8 +743,12 @@ function startChat() {
   document.getElementById('chatUserName').innerText = "Select a user";
   document.getElementById('chatUserInfo').innerText = "";
 
+  // Hide the chat box initially until a user is clicked
+  document.getElementById('chatBox').style.display = 'none';  // Add this line to ensure the chat box is hidden initially
+
   updateBotList();
 }
+
 
 
 </script>
