@@ -196,6 +196,51 @@
     .container.show-sidebar .chat-section {
       display: none;
     }
+    @media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid #ccc;
+    height: 200px;
+    overflow-y: auto;
+  }
+
+  .chat-section {
+    flex: 1;
+  }
+
+  .chat-input {
+    flex-wrap: wrap;
+  }
+
+  .chat-input button {
+    flex: 1 1 auto;
+    margin-top: 5px;
+  }
+
+  .chat-input input[type="text"] {
+    flex: 100%;
+  }
+
+  .login-section input, .login-section select, .login-section button {
+    width: 100%;
+  }
+      .user.unread::after {
+  content: "";
+  width: 10px;
+  height: 10px;
+  background-color: blue;
+  border-radius: 50%;
+  display: inline-block;
+  margin-left: 8px;
+}
+
+}
+
   </style>
   <script src='//whephiwums.com/sdk.js' data-zone='9229076' data-sdk='show_9229076'></script>
 </head>
