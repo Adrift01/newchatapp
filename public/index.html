@@ -861,6 +861,26 @@ document.getElementById('chatUserInfo').innerText = "";
   // document.querySelectorAll(".user").forEach(user => {
   //   user.addEventListener("click", openChat);
   // });*/
+     function filterUsers(type) {
+      const userList = document.getElementById("userList");
+      userList.innerHTML = "";
+
+      const filtered = allUsers.filter(user => {
+        if (type === "all") return true;
+        if (type === "male") return user.gender === "male";
+        if (type === "female") return user.gender === "female";
+        if (type === "inbox") return user.hasInbox;
+        return true;
+      });
+
+      filtered.forEach(user => {
+        const userDiv = document.createElement("div");
+        userDiv.textContent = user.name;
+        userDiv.className = "user";
+        userDiv.addEventListener("click", () => openChatWith(user.name));
+        userList.appendChild(userDiv);
+      });
+    }
     function openChatWith(userId) {
       activeUser = userId;
       document.getElementById("chatUserName").textContent = userId;
