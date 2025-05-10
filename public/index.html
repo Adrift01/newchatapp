@@ -61,10 +61,12 @@
     }
 
     .container {
-      display: none;
-      flex-direction: row;
-      height: 100vh;
-    }
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+  align-items: stretch; /* Ensures sidebar and chat-section stretch full height */
+  justify-content: flex-start; /* Align content from the top-left */
+}
 
     .sidebar {
       width: 300px;
