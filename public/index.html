@@ -466,7 +466,7 @@ function renderUserList(users) {
       sendBtn.disabled = false;
 
       document.getElementById('chatUserName').innerText = user.name;
-      document.getElementById('chatUserInfo').innerText = `${user.gender}, ${user.age} yrs, ${user.region}, ${user.countryName}`;
+      document.getElementById('chatUserInfo').innerText = `${user.gender}, ${user.age} yrs`;
       document.getElementById('videoCallBtn').style.display = 'inline-block';
 
       renderMessages();
@@ -700,10 +700,6 @@ function startChat() {
     name,
     age,
     gender,
-    region: "Unknown",
-    countryCode: "unknown",
-    countryName: "Unknown",
-    photo: "https://i.pravatar.cc/100?" + Math.random()
   };
 
   socket.emit('new-user', currentUserInfo);
