@@ -245,6 +245,7 @@ header {
 
 <header>Free Random Chat</header>
 
+<!-- Login Section -->
 <div class="login-section" id="loginSection">
   <h2>Enter Your Info</h2>
   <input type="text" id="username" placeholder="Your Name" required />
@@ -254,10 +255,11 @@ header {
     <option value="Male">Male</option>
     <option value="Female">Female</option>
   </select>
+  <br/>
   <button onclick="startChat()">Login & Enter</button>
 </div>
 
-<!-- Sidebar Section -->
+<!-- Sidebar -->
 <div class="sidebar" id="sidebar">
   <h3 id="onlineUserCount">Online Users (300+)</h3>
   <div class="filter-buttons">
@@ -272,8 +274,8 @@ header {
   <div class="user-list" id="userList"></div>
 </div>
 
-<!-- Chat Section (Initially hidden) -->
-<div class="chat-section" id="chatContainer" style="display: none;">
+<!-- Chat Section -->
+<div class="chat-section" id="chatContainer">
   <div class="chat-header" id="chatHeader">
     <div style="display: flex; justify-content: space-between; align-items: center;">
       <div>
@@ -302,11 +304,10 @@ header {
     <button class="emoji" onclick="addEmoji()">😊</button>
     <button class="gif" onclick="sendGif()">GIF</button>
     <button class="image" onclick="triggerImageInput()">📷</button>
-    <input type="file" id="imageInput" style="display:none;" onchange="handleImageUpload(event)">
+    <input type="file" id="imageInput" onchange="handleImageUpload(event)">
     <button class="send" onclick="sendThenShowAd()" id="sendBtn" disabled>Send</button>
   </div>
 </div>
-
 
 <script>
   const countrySelect = document.getElementById("country");
