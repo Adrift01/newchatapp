@@ -518,7 +518,7 @@ function renderUserList(users) {
       document.getElementById('chatUserName').innerText = user.name;
       document.getElementById('chatUserInfo').innerText = `${user.gender}, ${user.age} yrs, ${user.region}, ${user.countryName}`;
       document.getElementById('videoCallBtn').style.display = 'inline-block';
-
+openChatWith(user.name));
       renderMessages();
     });
 
@@ -877,8 +877,6 @@ document.getElementById('chatUserInfo').innerText = "";
         const userDiv = document.createElement("div");
         userDiv.textContent = user.name;
         userDiv.className = "user";
-        userDiv.addEventListener("click", () => openChatWith(user.name));
-        userList.appendChild(userDiv);
       });
     }
     function openChatWith(userId) {
