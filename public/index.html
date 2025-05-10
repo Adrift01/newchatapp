@@ -66,13 +66,18 @@ header {
 }
 
 .sidebar {
-  width: 300px;
-  border-right: 1px solid #ccc;
-  padding: 10px;
-  overflow-y: auto;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;            /* Full width of the viewport */
+  height: 100vh;           /* Full height of the viewport */
   background-color: #fff;
-  display: none; /* Initially hidden, shown after login */
+  padding: 20px;
+  overflow-y: auto;
+  z-index: 1000;
+  display: none;           /* Hidden initially */
 }
+
 
 .sidebar h3 {
   font-size: 16px;
