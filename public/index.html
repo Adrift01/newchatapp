@@ -8,227 +8,81 @@
   <title>Free Random Chat</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-    * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Inter', sans-serif;
-}
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+    body { display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+    header {
+      background: linear-gradient(to right, #6a11cb, #fc466b);
+      color: white; padding: 10px; text-align: center; font-size: 24px; font-weight: 700;
+    }
+    .login-section {
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; padding: 20px;
+    }
+    .login-section input, .login-section select, .login-section button {
+      padding: 10px; margin: 10px 0; width: 250px;
+      border: 1px solid #ccc; border-radius: 6px; font-size: 16px;
+    }
+    .login-section button {
+      background-color: #6a11cb; color: white; border: none; cursor: pointer;
+    }
+    .container { display: none; flex: 1; overflow: hidden; }
+    .sidebar {
+      width: 300px; border-right: 1px solid #ccc; padding: 10px;
+      overflow-y: auto; background-color: #fff;
+    }
+    .sidebar h3 { font-size: 16px; margin-bottom: 10px; }
+    .filter-buttons {
+      display: flex; gap: 10px; margin-bottom: 10px;
+    }
+    .filter-buttons button {
+      padding: 5px 10px; border: none; border-radius: 20px;
+      cursor: pointer; background: #eee;
+    }
+    .user-list {
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .user {
+      display: flex; justify-content: space-between;
+      background-color: #cfe2ff; padding: 8px;
+      border-radius: 6px; align-items: center; cursor: pointer;
+    }
+    .user.female { background-color: #f8d7da; }
+    .user.active { background-color: #a3c2ff; }
+    .user-info { display: flex; flex-direction: column; }
+    .flag { width: 20px; height: 15px; }
+    .chat-section {
+      flex: 1; display: flex; flex-direction: column;
+    }
+    .chat-header {
+      padding: 10px;
+      background: linear-gradient(to right, #fc466b, #6a11cb);
+      color: white; font-weight: 600;
+    }
+    .chat-body {
+      flex: 1; background: #f5f5f5;
+      padding: 10px; overflow-y: auto;
+    }
+    .chat-input {
+      display: flex; gap: 8px; padding: 10px;
+      border-top: 1px solid #ccc; background-color: #fff;
+    }
+    .chat-input input[type="text"] {
+      flex: 1; padding: 8px; border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+    .chat-input button {
+      padding: 8px 12px; border: none;
+      border-radius: 8px; background-color: #2979ff;
+      color: white; cursor: pointer;
+    }
+    .chat-input .image { background-color: #f44336; }
+    .chat-input .gif { background-color: #4caf50; }
+    .chat-input .emoji { background-color: #ff9800; }
+    .message { margin-bottom: 8px; }
+    .message img { max-width: 200px; border-radius: 10px; }
+    .message.you { font-weight: bold; }
 
-body {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  overflow: hidden;
-}
-
-header {
-  background: linear-gradient(to right, #6a11cb, #fc466b);
-  color: white;
-  padding: 10px;
-  text-align: center;
-  font-size: 24px;
-  font-weight: 700;
-}
-
-.login-section {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-}
-
-.login-section input,
-.login-section select,
-.login-section button {
-  padding: 10px;
-  margin: 10px 0;
-  width: 250px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 16px;
-}
-
-.login-section button {
-  background-color: #6a11cb;
-  color: white;
-  border: none;
-  cursor: pointer;
-}
-
-/* Main container */
-.container {
-  display: none; /* hidden initially */
-  flex: 1;
-  overflow: hidden;
-}
-
-/* Sidebar */
-.sidebar {
-  width: 300px;
-  border-right: 1px solid #ccc;
-  padding: 10px;
-  overflow-y: auto;
-  background-color: #fff;
-}
-
-.sidebar h3 {
-  font-size: 16px;
-  margin-bottom: 10px;
-}
-
-.filter-buttons {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 10px;
-  flex-wrap: wrap;
-}
-
-.filter-buttons button {
-  padding: 5px 10px;
-  border: none;
-  border-radius: 20px;
-  cursor: pointer;
-  background: #eee;
-}
-
-/* User list */
-.user-list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.user {
-  display: flex;
-  justify-content: space-between;
-  background-color: #cfe2ff;
-  padding: 8px;
-  border-radius: 6px;
-  align-items: center;
-  cursor: pointer;
-}
-
-.user.female {
-  background-color: #f8d7da;
-}
-
-.user.active {
-  background-color: #a3c2ff;
-}
-
-.user-info {
-  display: flex;
-  flex-direction: column;
-}
-
-.flag {
-  width: 20px;
-  height: 15px;
-}
-
-/* Chat section */
-.chat-section {
-  flex: 1;
-  display: none;
-  flex-direction: column;
-}
-
-.chat-section.fullscreen {
-  display: flex;
-  width: 100%;
-}
-
-.chat-header {
-  padding: 10px;
-  background: linear-gradient(to right, #fc466b, #6a11cb);
-  color: white;
-  font-weight: 600;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.chat-body {
-  flex: 1;
-  background: #f5f5f5;
-  padding: 10px;
-  overflow-y: auto;
-}
-
-.chat-input {
-  display: flex;
-  gap: 8px;
-  padding: 10px;
-  border-top: 1px solid #ccc;
-  background-color: #fff;
-  flex-wrap: wrap;
-}
-
-.chat-input input[type="text"] {
-  flex: 1;
-  padding: 8px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-}
-
-.chat-input button {
-  padding: 8px 12px;
-  border: none;
-  border-radius: 8px;
-  color: white;
-  cursor: pointer;
-}
-
-.chat-input .send {
-  background-color: #2979ff;
-}
-
-.chat-input .image {
-  background-color: #f44336;
-}
-
-.chat-input .gif {
-  background-color: #4caf50;
-}
-
-.chat-input .emoji {
-  background-color: #ff9800;
-}
-
-.message {
-  margin-bottom: 8px;
-}
-
-.message img {
-  max-width: 200px;
-  border-radius: 10px;
-}
-
-.message.you {
-  font-weight: bold;
-}
-
-/* For inbox dot */
-.user.unread::after {
-  content: "";
-  width: 10px;
-  height: 10px;
-  background-color: blue;
-  border-radius: 50%;
-  display: inline-block;
-  margin-left: 8px;
-}
-
-/* Hide sidebar when chat full screen */
-.sidebar.hidden {
-  display: none;
-}
-
-/* Responsive layout */
-@media (max-width: 768px) {
+    @media (max-width: 768px) {
   .container {
     flex-direction: column;
   }
@@ -238,10 +92,15 @@ header {
     border-right: none;
     border-bottom: 1px solid #ccc;
     height: 200px;
+    overflow-y: auto;
   }
 
-  .chat-section.fullscreen {
-    width: 100%;
+  .chat-section {
+    flex: 1;
+  }
+
+  .chat-input {
+    flex-wrap: wrap;
   }
 
   .chat-input button {
@@ -253,13 +112,22 @@ header {
     flex: 100%;
   }
 
-  .login-section input,
-  .login-section select,
-  .login-section button {
+  .login-section input, .login-section select, .login-section button {
     width: 100%;
   }
+      .user.unread::after {
+  content: "";
+  width: 10px;
+  height: 10px;
+  background-color: blue;
+  border-radius: 50%;
+  display: inline-block;
+  margin-left: 8px;
 }
 
+}
+
+    
   </style>
   <script src='//whephiwums.com/sdk.js' data-zone='9229076' data-sdk='show_9229076'></script>
 </head>
@@ -279,7 +147,6 @@ header {
   <button onclick="startChat()">Login & Enter</button>
 </div>
 
-
 <div class="container" id="chatContainer">
   <div class="sidebar">
     <h3 id="onlineUserCount">Online Users (300+)</h3>
@@ -293,29 +160,26 @@ header {
 </div>
     <div class="user-list" id="userList"></div>
     
-  </div>  
+  </div>
 
-  <div class="chat-header" id="chatHeader">
+  <div class="chat-section">
+    <div class="chat-header" id="chatHeader">
   <div style="display: flex; justify-content: space-between; align-items: center;">
     <div>
       <span id="chatUserName">Select a user</span><br/>
       <small id="chatUserInfo"></small>
     </div>
-    <div>
-      <button 
-        id="videoCallBtn"
-        onclick="show_9229076().then(() => {
-          window.open('https://www.febspot.com/auth/google/?ref=725136', '_blank');
-          alert('Sign in with Gmail to start video chat');
-        })" 
-        style="display:none; background-color: #ff9800; color: white; border: none; padding: 6px 12px; border-radius: 5px; cursor: pointer; font-size: 14px;">
-        📹 Video Call
-      </button>
-      <button onclick="closeChat()" style="background:red; color:white; margin-left:10px;">❌</button>
-    </div>
+    <button 
+  id="videoCallBtn"
+  onclick="show_9229076().then(() => {
+    window.open('https://www.febspot.com/auth/google/?ref=725136', '_blank');
+    alert('Sign in with Gmail to start video chat');
+  })" 
+  style="display:none; background-color: #ff9800; color: white; border: none; padding: 6px 12px; border-radius: 5px; cursor: pointer; font-size: 14px;">
+  📹 Video Call
+</button>
   </div>
 </div>
-
 
     <div class="chat-body" id="chatBody"></div>
     <div class="chat-input">
@@ -499,33 +363,26 @@ function renderUserList(users) {
     `;
 
     // ✅ When user is clicked
-   userDiv.addEventListener('click', () => {
-    // Remove "active" class from all
-    document.querySelectorAll('.user').forEach(u => u.classList.remove('active'));
-    userDiv.classList.add('active');
+    userDiv.addEventListener('click', () => {
+      // Remove "active" class from all
+      document.querySelectorAll('.user').forEach(u => u.classList.remove('active'));
+      userDiv.classList.add('active');
 
-    // ✅ Reset unread status
-    userDiv.classList.remove('unread');
-    unreadMessages[user.name] = false;
-    updateInboxBadge();
+      // ✅ Reset unread status
+      userDiv.classList.remove('unread');
+      unreadMessages[user.name] = false;
+      updateInboxBadge();
 
-    activeUser = user.name;
-    messageInput.disabled = false;
-    sendBtn.disabled = false;
+      activeUser = user.name;
+      messageInput.disabled = false;
+      sendBtn.disabled = false;
 
-    // Update chat user info
-    document.getElementById('chatUserName').innerText = user.name;
-    document.getElementById('chatUserInfo').innerText = `${user.gender}, ${user.age} yrs, ${user.region}, ${user.countryName}`;
-    document.getElementById('videoCallBtn').style.display = 'inline-block';
+      document.getElementById('chatUserName').innerText = user.name;
+      document.getElementById('chatUserInfo').innerText = `${user.gender}, ${user.age} yrs, ${user.region}, ${user.countryName}`;
+      document.getElementById('videoCallBtn').style.display = 'inline-block';
 
-    // Add class to hide sidebar and show chatbox full screen
-    document.querySelector(".sidebar").classList.add("hidden");
-    document.querySelector(".chat-section").classList.add("fullscreen");
-    document.querySelector(".chat-section").style.display = "block";
-    
-    renderMessages();
-});
-
+      renderMessages();
+    });
 
     userList.appendChild(userDiv);
   });
@@ -763,12 +620,9 @@ function startChat() {
 
   socket.emit('new-user', currentUserInfo);
 
-  document.getElementById('chatBody').style.display = 'none';
   document.getElementById('loginSection').style.display = 'none';
   document.getElementById('chatContainer').style.display = 'flex';
-  document.querySelector(".chat-section").style.display = "none"; // Ensure chat hidden
-  document.querySelector(".sidebar").style.display = "block"; // Only sidebar shown
-  
+
   document.getElementById('chatUserName').innerText = "Select a user";
 document.getElementById('chatUserInfo').innerText = "";
 
@@ -852,23 +706,7 @@ document.getElementById('chatUserInfo').innerText = "";
   }
     
 </script>
-  <script>
-function closeChat() {
-  // Hide chat section, show sidebar
-  document.querySelector(".chat-section").classList.remove("fullscreen");
-  document.querySelector(".sidebar").classList.remove("hidden");
-
-  // Clear active chat
-  activeUser = null;
-  chatBody.innerHTML = '';
-  document.getElementById("chatUserName").textContent = "Select a user";
-  document.getElementById("chatUserInfo").textContent = "";
-  messageInput.disabled = true;
-  sendBtn.disabled = true;
-  document.getElementById("videoCallBtn").style.display = "none";
-}
-</script>
-
+  
 
 
 
