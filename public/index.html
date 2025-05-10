@@ -279,6 +279,7 @@ header {
   <button onclick="startChat()">Login & Enter</button>
 </div>
 
+
 <div class="container" id="chatContainer">
   <div class="sidebar">
     <h3 id="onlineUserCount">Online Users (300+)</h3>
@@ -292,7 +293,7 @@ header {
 </div>
     <div class="user-list" id="userList"></div>
     
-  </div>
+  </div>  
 
   <div class="chat-header" id="chatHeader">
   <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -762,8 +763,9 @@ function startChat() {
 
   socket.emit('new-user', currentUserInfo);
 
+  document.getElementById('chatBody').style.display = 'none';
   document.getElementById('loginSection').style.display = 'none';
-  //document.getElementById('chatContainer').style.display = 'flex';
+  document.getElementById('chatContainer').style.display = 'flex';
   document.querySelector(".chat-section").style.display = "none"; // Ensure chat hidden
   document.querySelector(".sidebar").style.display = "block"; // Only sidebar shown
   
