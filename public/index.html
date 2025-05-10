@@ -847,7 +847,7 @@ document.getElementById('chatUserInfo').innerText = "";
     
 </script>
   <script>
-  function closeChat() {
+  /*function closeChat() {
     document.getElementById("chatContainer").style.display = "none";
     document.getElementById("sidebar").style.display = "block";
   }
@@ -860,7 +860,27 @@ document.getElementById('chatUserInfo').innerText = "";
   // Example: call openChat() when a user is clicked
   // document.querySelectorAll(".user").forEach(user => {
   //   user.addEventListener("click", openChat);
-  // });
+  // });*/
+    function openChatWith(userId) {
+      activeUser = userId;
+      document.getElementById("chatUserName").textContent = userId;
+      document.getElementById("messageInput").disabled = false;
+      document.getElementById("sendBtn").disabled = false;
+
+      const container = document.getElementById("chatContainer");
+      container.classList.remove("show-sidebar");
+      container.classList.add("show-chat");
+    }
+
+    function closeChat() {
+      const container = document.getElementById("chatContainer");
+      container.classList.remove("show-chat");
+      container.classList.add("show-sidebar");
+
+      activeUser = null;
+      document.getElementById("messageInput").disabled = true;
+      document.getElementById("sendBtn").disabled = true;
+    }
 </script>
 
 
