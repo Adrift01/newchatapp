@@ -658,7 +658,7 @@ function startChat() {
   socket.emit('new-user', currentUserInfo);
 
   document.getElementById("loginSection").style.display = "none";
-    document.getElementById("chatContainer");
+      const container = document.getElementById("chatContainer");
       container.classList.add("show-sidebar");
       container.style.display = "flex";
   
