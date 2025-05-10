@@ -145,7 +145,21 @@
     margin-left: 8px;
   }
 }
-.container.show-sidebar .chat-section {
+    
+.container.show-chat .sidebar {
+      display: none;
+    }
+
+    .container.show-chat .chat-section {
+      display: flex;
+    }
+
+    .container.show-sidebar .sidebar {
+      display: block;
+      width: 100%;
+    }
+
+    .container.show-sidebar .chat-section {
       display: none;
     }
 
