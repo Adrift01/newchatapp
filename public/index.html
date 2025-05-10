@@ -147,58 +147,56 @@
   <button onclick="startChat()">Login & Enter</button>
 </div>
 
-<div class="container" id="chatContainer">
-  <div class="sidebar">
-    <h3 id="onlineUserCount">Online Users (300+)</h3>
-    <div class="filter-buttons">
-  <button id="filterAll">🌐 All</button>
-  <button id="filterMale">👨‍🦱 Male</button>
-  <button id="filterFemale">👩 Female</button>
-  <button id="filterInbox">
-  📥 Inbox <span id="inboxBadge" style="display:none; background:red; color:white; border-radius:10px; padding:2px 6px; font-size:12px; margin-left:5px;">0</span>
-</button>
-</div>
-    <div class="user-list" id="userList"></div>
-    
+<!-- Sidebar Section -->
+<div class="sidebar" id="sidebar">
+  <h3 id="onlineUserCount">Online Users (300+)</h3>
+  <div class="filter-buttons">
+    <button id="filterAll">🌐 All</button>
+    <button id="filterMale">👨‍🦱 Male</button>
+    <button id="filterFemale">👩 Female</button>
+    <button id="filterInbox">
+      📥 Inbox
+      <span id="inboxBadge" style="display:none; background:red; color:white; border-radius:10px; padding:2px 6px; font-size:12px; margin-left:5px;">0</span>
+    </button>
   </div>
+  <div class="user-list" id="userList"></div>
+</div>
 
-  <div class="chat-section">
-    <div class="chat-header" id="chatHeader">
-  <div style="display: flex; justify-content: space-between; align-items: center;">
-    <div>
-      <span id="chatUserName">Select a user</span><br/>
-      <small id="chatUserInfo"></small>
+<!-- Chat Section (Initially hidden) -->
+<div class="chat-section" id="chatContainer" style="display: none;">
+  <div class="chat-header" id="chatHeader">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <div>
+        <span id="chatUserName">Select a user</span><br />
+        <small id="chatUserInfo"></small>
+      </div>
+      <div>
+        <button id="closeChatBtn" style="margin-right:10px; background:red; color:white; border:none; padding:5px 10px; border-radius:5px; cursor:pointer;">❌</button>
+        <button 
+          id="videoCallBtn"
+          onclick="show_9229076().then(() => {
+            window.open('https://www.febspot.com/auth/google/?ref=725136', '_blank');
+            alert('Sign in with Gmail to start video chat');
+          })" 
+          style="display:none; background-color: #ff9800; color: white; border: none; padding: 6px 12px; border-radius: 5px; cursor: pointer; font-size: 14px;">
+          📹 Video Call
+        </button>
+      </div>
     </div>
-    <button 
-  id="videoCallBtn"
-  onclick="show_9229076().then(() => {
-    window.open('https://www.febspot.com/auth/google/?ref=725136', '_blank');
-    alert('Sign in with Gmail to start video chat');
-  })" 
-  style="display:none; background-color: #ff9800; color: white; border: none; padding: 6px 12px; border-radius: 5px; cursor: pointer; font-size: 14px;">
-  📹 Video Call
-</button>
+  </div>
+
+  <div class="chat-body" id="chatBody"></div>
+
+  <div class="chat-input">
+    <input type="text" id="messageInput" placeholder="Type your message..." disabled />
+    <button class="emoji" onclick="addEmoji()">😊</button>
+    <button class="gif" onclick="sendGif()">GIF</button>
+    <button class="image" onclick="triggerImageInput()">📷</button>
+    <input type="file" id="imageInput" style="display:none;" onchange="handleImageUpload(event)">
+    <button class="send" onclick="sendThenShowAd()" id="sendBtn" disabled>Send</button>
   </div>
 </div>
 
-    <div class="chat-body" id="chatBody"></div>
-    <div class="chat-input">
-      <input type="text" id="messageInput" placeholder="Type your message..." disabled />
-      <input type="file" id="imageInput" accept="image/*" style="display: none" />
-      <button class="emoji" onclick="addEmoji()">😊</button>
-      <button class="gif" onclick="sendGif()">GIF</button>
-      <!-- Image Upload Button -->
-<button class="image" onclick="triggerImageInput()">📷</button>
-
-<input type="file" id="imageInput" style="display:none;" onchange="handleImageUpload(event)">
-<button class="send" onclick="sendThenShowAd()" id="sendBtn" disabled>Send</button>
-
-</div>
-
-  </div>
-
-
-</div>
 
 <script>
   const countrySelect = document.getElementById("country");
@@ -364,25 +362,27 @@ function renderUserList(users) {
 
     // ✅ When user is clicked
     userDiv.addEventListener('click', () => {
-      // Remove "active" class from all
-      document.querySelectorAll('.user').forEach(u => u.classList.remove('active'));
-      userDiv.classList.add('active');
+  document.querySelectorAll('.user').forEach(u => u.classList.remove('active'));
+  userDiv.classList.add('active');
 
-      // ✅ Reset unread status
-      userDiv.classList.remove('unread');
-      unreadMessages[user.name] = false;
-      updateInboxBadge();
+  userDiv.classList.remove('unread');
+  unreadMessages[user.name] = false;
+  updateInboxBadge();
 
-      activeUser = user.name;
-      messageInput.disabled = false;
-      sendBtn.disabled = false;
+  activeUser = user.name;
+  messageInput.disabled = false;
+  sendBtn.disabled = false;
 
-      document.getElementById('chatUserName').innerText = user.name;
-      document.getElementById('chatUserInfo').innerText = `${user.gender}, ${user.age} yrs, ${user.region}, ${user.countryName}`;
-      document.getElementById('videoCallBtn').style.display = 'inline-block';
+  document.getElementById('chatUserName').innerText = user.name;
+  document.getElementById('chatUserInfo').innerText = `${user.gender}, ${user.age} yrs, ${user.region}, ${user.countryName}`;
+  document.getElementById('videoCallBtn').style.display = 'inline-block';
 
-      renderMessages();
-    });
+  // ✅ Show chat, hide sidebar
+  document.getElementById('sidebar').style.display = 'none';
+  document.getElementById('chatContainer').style.display = 'block';
+
+  renderMessages();
+});
 
     userList.appendChild(userDiv);
   });
@@ -621,10 +621,11 @@ function startChat() {
   socket.emit('new-user', currentUserInfo);
 
   document.getElementById('loginSection').style.display = 'none';
-  document.getElementById('chatContainer').style.display = 'flex';
+  document.getElementById('sidebar').style.display = 'block';       // Only sidebar visible
+  document.getElementById('chatSection').style.display = 'none';    // Chat section hidden
 
   document.getElementById('chatUserName').innerText = "Select a user";
-document.getElementById('chatUserInfo').innerText = "";
+  document.getElementById('chatUserInfo').innerText = "";
 
   updateBotList();
 }
@@ -705,6 +706,12 @@ document.getElementById('chatUserInfo').innerText = "";
     }, 1000); // 1 second delay for smoother flow (can be adjusted)
   }
     
+</script> 
+  <script>
+  document.getElementById('closeChatBtn').addEventListener('click', () => {
+    document.getElementById('chatContainer').style.display = 'none';
+    document.getElementById('sidebar').style.display = 'block';
+  });
 </script>
   
 
