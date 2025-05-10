@@ -514,7 +514,7 @@ function renderUserList(users) {
       activeUser = user.name;
       messageInput.disabled = false;
       sendBtn.disabled = false;
-
+openChatWithUser(user.id, user.name, `Age: ${user.age}, Gender: ${user.gender}`);
       document.getElementById('chatUserName').innerText = user.name;
       document.getElementById('chatUserInfo').innerText = `${user.gender}, ${user.age} yrs, ${user.region}, ${user.countryName}`;
       document.getElementById('videoCallBtn').style.display = 'inline-block';
@@ -844,6 +844,26 @@ document.getElementById('chatUserInfo').innerText = "";
     }, 1000); // 1 second delay for smoother flow (can be adjusted)
   }
     
+function closeChat() {
+  const chatContainer = document.getElementById("chatContainer");
+  chatContainer.classList.remove("show-chat");
+  chatContainer.classList.add("show-sidebar");
+}
+
+    function openChatWithUser(userId, userName, userInfo) {
+  activeUser = userId;
+  document.getElementById("chatUserName").textContent = userName;
+  document.getElementById("chatUserInfo").textContent = userInfo;
+  messageInput.disabled = false;
+  sendBtn.disabled = false;
+  chatBody.innerHTML = '';
+  renderMessages();
+
+  // Show chat view
+  const chatContainer = document.getElementById("chatContainer");
+  chatContainer.classList.remove("show-sidebar");
+  chatContainer.classList.add("show-chat");
+}
 
   /*function closeChat() {
     document.getElementById("chatContainer").style.display = "none";
