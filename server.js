@@ -95,7 +95,8 @@ io.on('connection', (socket) => {
     console.log('Users online:', users.length);
 
     // Send user list to all real clients
-    io.emit('user-list', [...users, ...allBotUsers]);
+io.emit('user-list', users);
+
 
 
     // Bot messages to the new user
