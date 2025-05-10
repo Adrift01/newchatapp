@@ -762,8 +762,8 @@ function startChat() {
 
   socket.emit('new-user', currentUserInfo);
 
-  document.getElementById('loginSection').style.display = 'none';
-  document.getElementById('chatContainer').style.display = 'flex';
+  //document.getElementById('loginSection').style.display = 'none';
+  //document.getElementById('chatContainer').style.display = 'flex';
   document.querySelector(".chat-section").style.display = "none"; // Ensure chat hidden
   document.querySelector(".sidebar").style.display = "block"; // Only sidebar shown
   
@@ -850,12 +850,23 @@ document.getElementById('chatUserInfo').innerText = "";
   }
     
 </script>
-  <script>function closeChat() {
-    document.querySelector(".chat-section").classList.remove("fullscreen");
-    document.querySelector(".sidebar").classList.remove("hidden");
-    document.querySelector(".chat-section").style.display = "none";
+  <script>
+function closeChat() {
+  // Hide chat section, show sidebar
+  document.querySelector(".chat-section").classList.remove("fullscreen");
+  document.querySelector(".sidebar").classList.remove("hidden");
+
+  // Clear active chat
+  activeUser = null;
+  chatBody.innerHTML = '';
+  document.getElementById("chatUserName").textContent = "Select a user";
+  document.getElementById("chatUserInfo").textContent = "";
+  messageInput.disabled = true;
+  sendBtn.disabled = true;
+  document.getElementById("videoCallBtn").style.display = "none";
 }
 </script>
+
 
 
 
