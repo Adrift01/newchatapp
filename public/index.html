@@ -151,28 +151,28 @@ header {
 .chat-input {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 6px;
   padding: 10px;
   border-top: 1px solid #ccc;
-  background-color: #fff;
+  background: white;
 }
 
 .chat-input input[type="text"] {
   flex: 1 1 100%;
   padding: 8px;
-  border-radius: 8px;
+  border-radius: 6px;
   border: 1px solid #ccc;
 }
 
 .chat-input button {
-  padding: 8px 12px;
-  border: none;
-  border-radius: 8px;
-  background-color: #2979ff;
-  color: white;
-  cursor: pointer;
   flex: 1 1 30%;
   min-width: 80px;
+  padding: 8px;
+  border: none;
+  border-radius: 6px;
+  background: #2979ff;
+  color: white;
+  cursor: pointer;
 }
 
 .chat-input .image {
@@ -193,7 +193,7 @@ header {
 }
 
 .message img {
-  max-width: 100%;
+  max-width: 90vw;
   height: auto;
   border-radius: 10px;
   display: block;
@@ -220,10 +220,8 @@ header {
   }
 
   .sidebar {
-    width: 100%;
-    border-right: none;
-    border-bottom: 1px solid #ccc;
     height: 200px;
+    overflow-y: auto;
   }
 
   .chat-section {
@@ -234,13 +232,14 @@ header {
   }
 
   .chat-body {
+    max-height: 50vh;
     overflow-y: auto;
   }
 
   .chat-input {
     flex-direction: column;
-    gap: 6px;
   }
+
 
   .chat-input input[type="text"] {
     flex: 1 1 100%;
