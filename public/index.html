@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 
 <html lang="en">
 <head>
@@ -8,203 +8,114 @@
   <title>Free Random Chat</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-   * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Inter', sans-serif;
-}
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+    body { display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+    header {
+      background: linear-gradient(to right, #6a11cb, #fc466b);
+      color: white; padding: 10px; text-align: center; font-size: 24px; font-weight: 700;
+    }
+    .login-section {
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; padding: 20px;
+    }
+    .login-section input, .login-section select, .login-section button {
+      padding: 10px; margin: 10px 0; width: 250px;
+      border: 1px solid #ccc; border-radius: 6px; font-size: 16px;
+    }
+    .login-section button {
+      background-color: #6a11cb; color: white; border: none; cursor: pointer;
+    }
+    .container { display: none; flex: 1; overflow: hidden; }
+    .sidebar {
+      width: 300px; border-right: 1px solid #ccc; padding: 10px;
+      overflow-y: auto; background-color: #fff;
+    }
+    .sidebar h3 { font-size: 16px; margin-bottom: 10px; }
+    .filter-buttons {
+      display: flex; gap: 10px; margin-bottom: 10px;
+    }
+    .filter-buttons button {
+      padding: 5px 10px; border: none; border-radius: 20px;
+      cursor: pointer; background: #eee;
+    }
+    .user-list {
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .user {
+      display: flex; justify-content: space-between;
+      background-color: #cfe2ff; padding: 8px;
+      border-radius: 6px; align-items: center; cursor: pointer;
+    }
+    .user.female { background-color: #f8d7da; }
+    .user.active { background-color: #a3c2ff; }
+    .user-info { display: flex; flex-direction: column; }
+    .flag { width: 20px; height: 15px; }
+    .chat-section {
+      flex: 1; display: flex; flex-direction: column;
+    }
+    .chat-header {
+      padding: 10px;
+      background: linear-gradient(to right, #fc466b, #6a11cb);
+      color: white; font-weight: 600;
+    }
+    .chat-body {
+      flex: 1; background: #f5f5f5;
+      padding: 10px; overflow-y: auto;
+    }
+    .chat-input {
+      display: flex; gap: 8px; padding: 10px;
+      border-top: 1px solid #ccc; background-color: #fff;
+    }
+    .chat-input input[type="text"] {
+      flex: 1; padding: 8px; border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+    .chat-input button {
+      padding: 8px 12px; border: none;
+      border-radius: 8px; background-color: #2979ff;
+      color: white; cursor: pointer;
+    }
+    .chat-input .image { background-color: #f44336; }
+    .chat-input .gif { background-color: #4caf50; }
+    .chat-input .emoji { background-color: #ff9800; }
+    .message { margin-bottom: 8px; }
+    .message img { max-width: 200px; border-radius: 10px; }
+    .message.you { font-weight: bold; }
 
-body {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  overflow: hidden;
-}
+    @media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+  }
 
-header {
-  background: linear-gradient(to right, #6a11cb, #fc466b);
-  color: white;
-  padding: 10px;
-  text-align: center;
-  font-size: 24px;
-  font-weight: 700;
-}
+  .sidebar {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid #ccc;
+    height: 200px;
+    overflow-y: auto;
+  }
 
-.login-section {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-}
+  .chat-section {
+    flex: 1;
+  }
 
-.login-section input,
-.login-section select,
-.login-section button {
-  padding: 10px;
-  margin: 10px 0;
-  width: 250px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 16px;
-}
+  .chat-input {
+    flex-wrap: wrap;
+  }
 
-.login-section button {
-  background-color: #6a11cb;
-  color: white;
-  border: none;
-  cursor: pointer;
-}
+  .chat-input button {
+    flex: 1 1 auto;
+    margin-top: 5px;
+  }
 
-.container {
-  flex: 1;
-  display: flex;
-  height: 100%;
-  overflow: hidden;
-}
+  .chat-input input[type="text"] {
+    flex: 100%;
+  }
 
-.sidebar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw !important;
-  height: 100vh !important;
-  background-color: #fff;
-  padding: 20px;
-  overflow-y: auto;
-  display: none;
-  z-index: 1000;
-}
-
-
-.sidebar h3 {
-  font-size: 16px;
-  margin-bottom: 10px;
-}
-
-.filter-buttons {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 10px;
-  flex-wrap: wrap;
-}
-
-.filter-buttons button {
-  padding: 5px 10px;
-  border: none;
-  border-radius: 20px;
-  cursor: pointer;
-  background: #eee;
-}
-
-.user-list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.user {
-  display: flex;
-  justify-content: space-between;
-  background-color: #cfe2ff;
-  padding: 8px;
-  border-radius: 6px;
-  align-items: center;
-  cursor: pointer;
-}
-
-.user.female {
-  background-color: #f8d7da;
-}
-
-.user.active {
-  background-color: #a3c2ff;
-}
-
-.user-info {
-  display: flex;
-  flex-direction: column;
-}
-
-.flag {
-  width: 20px;
-  height: 15px;
-}
-
-.chat-section {
-  flex: 1;
-  display: none; /* Hidden initially */
-  flex-direction: column;
-}
-
-.chat-header {
-  padding: 10px;
-  background: linear-gradient(to right, #fc466b, #6a11cb);
-  color: white;
-  font-weight: 600;
-}
-
-.chat-body {
-  flex: 1;
-  background: #f5f5f5;
-  padding: 10px;
-  overflow-y: auto;
-}
-
-.chat-input {
-  display: flex;
-  gap: 8px;
-  padding: 10px;
-  border-top: 1px solid #ccc;
-  background-color: #fff;
-  flex-wrap: wrap;
-}
-
-.chat-input input[type="text"] {
-  flex: 1;
-  padding: 8px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  min-width: 100px;
-}
-
-.chat-input button {
-  padding: 8px 12px;
-  border: none;
-  border-radius: 8px;
-  background-color: #2979ff;
-  color: white;
-  cursor: pointer;
-}
-
-.chat-input .image {
-  background-color: #f44336;
-}
-
-.chat-input .gif {
-  background-color: #4caf50;
-}
-
-.chat-input .emoji {
-  background-color: #ff9800;
-}
-
-.message {
-  margin-bottom: 8px;
-}
-
-.message img {
-  max-width: 200px;
-  border-radius: 10px;
-}
-
-.message.you {
-  font-weight: bold;
-}
-
-.user.unread::after {
+  .login-section input, .login-section select, .login-section button {
+    width: 100%;
+  }
+      .user.unread::after {
   content: "";
   width: 10px;
   height: 10px;
@@ -214,35 +125,9 @@ header {
   margin-left: 8px;
 }
 
-/* 🔁 Responsive behavior */
-@media (max-width: 768px) {
-  .container {
-    flex-direction: column;
-  }
-
-  .sidebar {
-    width: 100%;
-    border-right: none;
-    border-bottom: 1px solid #ccc;
-    height: auto;
-    max-height: 300px;
-    display: none; /* still controlled via JS */
-  }
-
-  .chat-section {
-    flex: 1;
-    display: none;
-  }
-
-  .chat-input input[type="text"] {
-    flex: 1 1 100%;
-  }
-
-  .chat-input button {
-    flex: 1 1 48%;
-  }
 }
 
+    
   </style>
   <script src='//whephiwums.com/sdk.js' data-zone='9229076' data-sdk='show_9229076'></script>
 </head>
@@ -262,56 +147,58 @@ header {
   <button onclick="startChat()">Login & Enter</button>
 </div>
 
-<!-- Sidebar Section -->
-<div class="sidebar" id="sidebar">
-  <h3 id="onlineUserCount">Online Users (300+)</h3>
-  <div class="filter-buttons">
-    <button id="filterAll">🌐 All</button>
-    <button id="filterMale">👨‍🦱 Male</button>
-    <button id="filterFemale">👩 Female</button>
-    <button id="filterInbox">
-      📥 Inbox
-      <span id="inboxBadge" style="display:none; background:red; color:white; border-radius:10px; padding:2px 6px; font-size:12px; margin-left:5px;">0</span>
-    </button>
-  </div>
-  <div class="user-list" id="userList"></div>
+<div class="container" id="chatContainer">
+  <div class="sidebar">
+    <h3 id="onlineUserCount">Online Users (300+)</h3>
+    <div class="filter-buttons">
+  <button id="filterAll">🌐 All</button>
+  <button id="filterMale">👨‍🦱 Male</button>
+  <button id="filterFemale">👩 Female</button>
+  <button id="filterInbox">
+  📥 Inbox <span id="inboxBadge" style="display:none; background:red; color:white; border-radius:10px; padding:2px 6px; font-size:12px; margin-left:5px;">0</span>
+</button>
 </div>
+    <div class="user-list" id="userList"></div>
+    
+  </div>
 
-<!-- Chat Section (Initially hidden) -->
-<div class="chat-section" id="chatContainer" style="display: none;">
-  <div class="chat-header" id="chatHeader">
-    <div style="display: flex; justify-content: space-between; align-items: center;">
-      <div>
-        <span id="chatUserName">Select a user</span><br />
-        <small id="chatUserInfo"></small>
-      </div>
-      <div>
-        <button id="closeChatBtn" style="margin-right:10px; background:red; color:white; border:none; padding:5px 10px; border-radius:5px; cursor:pointer;">❌</button>
-        <button 
-          id="videoCallBtn"
-          onclick="show_9229076().then(() => {
-            window.open('https://www.febspot.com/auth/google/?ref=725136', '_blank');
-            alert('Sign in with Gmail to start video chat');
-          })" 
-          style="display:none; background-color: #ff9800; color: white; border: none; padding: 6px 12px; border-radius: 5px; cursor: pointer; font-size: 14px;">
-          📹 Video Call
-        </button>
-      </div>
+  <div class="chat-section">
+    <div class="chat-header" id="chatHeader">
+  <div style="display: flex; justify-content: space-between; align-items: center;">
+    <div>
+      <span id="chatUserName">Select a user</span><br/>
+      <small id="chatUserInfo"></small>
     </div>
-  </div>
-
-  <div class="chat-body" id="chatBody"></div>
-
-  <div class="chat-input">
-    <input type="text" id="messageInput" placeholder="Type your message..." disabled />
-    <button class="emoji" onclick="addEmoji()">😊</button>
-    <button class="gif" onclick="sendGif()">GIF</button>
-    <button class="image" onclick="triggerImageInput()">📷</button>
-    <input type="file" id="imageInput" style="display:none;" onchange="handleImageUpload(event)">
-    <button class="send" onclick="sendThenShowAd()" id="sendBtn" disabled>Send</button>
+    <button 
+  id="videoCallBtn"
+  onclick="show_9229076().then(() => {
+    window.open('https://www.febspot.com/auth/google/?ref=725136', '_blank');
+    alert('Sign in with Gmail to start video chat');
+  })" 
+  style="display:none; background-color: #ff9800; color: white; border: none; padding: 6px 12px; border-radius: 5px; cursor: pointer; font-size: 14px;">
+  📹 Video Call
+</button>
   </div>
 </div>
 
+    <div class="chat-body" id="chatBody"></div>
+    <div class="chat-input">
+      <input type="text" id="messageInput" placeholder="Type your message..." disabled />
+      <input type="file" id="imageInput" accept="image/*" style="display: none" />
+      <button class="emoji" onclick="addEmoji()">😊</button>
+      <button class="gif" onclick="sendGif()">GIF</button>
+      <!-- Image Upload Button -->
+<button class="image" onclick="triggerImageInput()">📷</button>
+
+<input type="file" id="imageInput" style="display:none;" onchange="handleImageUpload(event)">
+<button class="send" onclick="sendThenShowAd()" id="sendBtn" disabled>Send</button>
+
+</div>
+
+  </div>
+
+
+</div>
 
 <script>
   const countrySelect = document.getElementById("country");
@@ -349,14 +236,14 @@ function appendMessage(sender, text, isYou = false) {
   if (!messageStore[activeUser]) messageStore[activeUser] = [];
 
   // Store message
-  messageStore[activeUser].push(isYou ? you:${text} : text);
+  messageStore[activeUser].push(isYou ? `you:${text}` : text);
 
   // Show in chat if active
   if (activeUser) {
     const div = document.createElement('div');
     div.className = 'message';
     div.classList.toggle('you', isYou);
-    div.textContent = isYou ? You: ${text} : Stranger: ${text};
+    div.textContent = isYou ? `You: ${text}` : `Stranger: ${text}`;
     chatBody.appendChild(div);
     chatBody.scrollTop = chatBody.scrollHeight;
   }
@@ -414,7 +301,7 @@ function appendMessage(sender, text, isYou = false) {
       .then(data => {
         const gifUrl = data.data.images.fixed_height.url;
         if (!messageStore[activeUser]) messageStore[activeUser] = [];
-        messageStore[activeUser].push(img:${gifUrl});
+        messageStore[activeUser].push(`img:${gifUrl}`);
         renderMessages();
       });
   }
@@ -429,13 +316,13 @@ imageInput.addEventListener('change', () => {
 
     // Store locally
     if (!messageStore[activeUser]) messageStore[activeUser] = [];
-    messageStore[activeUser].push(img:${base64Image});
+    messageStore[activeUser].push(`img:${base64Image}`);
     renderMessages();
 
     // 🔥 Send to other user
     socket.emit('send-message', {
       to: activeUser,
-      message: img:${base64Image},
+      message: `img:${base64Image}`,
     });
   };
   reader.readAsDataURL(file);
@@ -459,7 +346,7 @@ function renderUserList(users) {
 
   users.forEach(user => {
     const userDiv = document.createElement('div');
-    userDiv.className = user ${user.gender.toLowerCase()};
+    userDiv.className = `user ${user.gender.toLowerCase()}`;
     userDiv.dataset.username = user.name;
 
     // ✅ Add "unread" dot if there's an unread message
@@ -467,37 +354,35 @@ function renderUserList(users) {
       userDiv.classList.add('unread');
     }
 
-    userDiv.innerHTML = 
+    userDiv.innerHTML = `
       <div class="user-info">
         <strong>${user.name}</strong>
         <small>${user.age} yrs, ${user.region}, ${user.countryName}</small>
       </div>
       <img src="https://flagcdn.com/${user.countryCode}.svg" class="flag" />
-    ;
+    `;
 
     // ✅ When user is clicked
     userDiv.addEventListener('click', () => {
-  document.querySelectorAll('.user').forEach(u => u.classList.remove('active'));
-  userDiv.classList.add('active');
+      // Remove "active" class from all
+      document.querySelectorAll('.user').forEach(u => u.classList.remove('active'));
+      userDiv.classList.add('active');
 
-  userDiv.classList.remove('unread');
-  unreadMessages[user.name] = false;
-  updateInboxBadge();
+      // ✅ Reset unread status
+      userDiv.classList.remove('unread');
+      unreadMessages[user.name] = false;
+      updateInboxBadge();
 
-  activeUser = user.name;
-  messageInput.disabled = false;
-  sendBtn.disabled = false;
+      activeUser = user.name;
+      messageInput.disabled = false;
+      sendBtn.disabled = false;
 
-  document.getElementById('chatUserName').innerText = user.name;
-  document.getElementById('chatUserInfo').innerText = ${user.gender}, ${user.age} yrs, ${user.region}, ${user.countryName};
-  document.getElementById('videoCallBtn').style.display = 'inline-block';
+      document.getElementById('chatUserName').innerText = user.name;
+      document.getElementById('chatUserInfo').innerText = `${user.gender}, ${user.age} yrs, ${user.region}, ${user.countryName}`;
+      document.getElementById('videoCallBtn').style.display = 'inline-block';
 
-  // ✅ Show chat, hide sidebar
-  document.getElementById('sidebar').style.display = 'none';
-  document.getElementById('chatContainer').style.display = 'block';
-
-  renderMessages();
-});
+      renderMessages();
+    });
 
     userList.appendChild(userDiv);
   });
@@ -585,7 +470,7 @@ document.getElementById("filterFemale").addEventListener("click", () => {
     const min = 300;
     const max = 900;
     const randomCount = Math.floor(Math.random() * (max - min + 1)) + min;
-    document.getElementById("onlineUserCount").innerText = Online Users (${randomCount} );
+    document.getElementById("onlineUserCount").innerText = `Online Users (${randomCount} )`;
     
     // Repeat every 15-20 seconds
     const nextUpdate = Math.random() * (20000 - 15000) + 15000; // ms
@@ -735,20 +620,14 @@ function startChat() {
 
   socket.emit('new-user', currentUserInfo);
 
-  // Hide the login section and show the sidebar
   document.getElementById('loginSection').style.display = 'none';
-  document.getElementById('sidebar').style.display = 'block';       // Only sidebar visible
-  document.getElementById('chatSection').style.display = 'none';    // Chat section hidden
+  document.getElementById('chatContainer').style.display = 'flex';
 
   document.getElementById('chatUserName').innerText = "Select a user";
-  document.getElementById('chatUserInfo').innerText = "";
-
-  // Hide the chat box initially until a user is clicked
-  document.getElementById('chatBox').style.display = 'none';  // Add this line to ensure the chat box is hidden initially
+document.getElementById('chatUserInfo').innerText = "";
 
   updateBotList();
 }
-
 
 
 </script>
@@ -826,25 +705,10 @@ function startChat() {
     }, 1000); // 1 second delay for smoother flow (can be adjusted)
   }
     
-</script> 
-  <script>
- document.getElementById("closeChatBtn").addEventListener("click", () => {
-  document.getElementById("chatContainer").style.display = "none";
-  const sidebar = document.getElementById("sidebar");
-  sidebar.style.display = "block";
-
-  // Force full screen style
-  sidebar.style.width = "100vw";
-  sidebar.style.height = "100vh";
-  sidebar.style.position = "fixed";
-  sidebar.style.top = "0";
-  sidebar.style.left = "0";
-});
-
 </script>
   
 
 
 
 </body>
-</html> 
+</html>
