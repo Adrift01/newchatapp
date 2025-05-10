@@ -518,7 +518,6 @@ function renderUserList(users) {
       document.getElementById('chatUserName').innerText = user.name;
       document.getElementById('chatUserInfo').innerText = `${user.gender}, ${user.age} yrs, ${user.region}, ${user.countryName}`;
       document.getElementById('videoCallBtn').style.display = 'inline-block';
-openChatWith(user.name));
       renderMessages();
     });
 
@@ -845,8 +844,7 @@ document.getElementById('chatUserInfo').innerText = "";
     }, 1000); // 1 second delay for smoother flow (can be adjusted)
   }
     
-</script>
-  <script>
+
   /*function closeChat() {
     document.getElementById("chatContainer").style.display = "none";
     document.getElementById("sidebar").style.display = "block";
@@ -861,44 +859,7 @@ document.getElementById('chatUserInfo').innerText = "";
   // document.querySelectorAll(".user").forEach(user => {
   //   user.addEventListener("click", openChat);
   // });*/
-     function filterUsers(type) {
-      const userList = document.getElementById("userList");
-      userList.innerHTML = "";
-
-      const filtered = allUsers.filter(user => {
-        if (type === "all") return true;
-        if (type === "male") return user.gender === "male";
-        if (type === "female") return user.gender === "female";
-        if (type === "inbox") return user.hasInbox;
-        return true;
-      });
-
-      filtered.forEach(user => {
-        const userDiv = document.createElement("div");
-        userDiv.textContent = user.name;
-        userDiv.className = "user";
-      });
-    }
-    function openChatWith(userId) {
-      activeUser = userId;
-      document.getElementById("chatUserName").textContent = userId;
-      document.getElementById("messageInput").disabled = false;
-      document.getElementById("sendBtn").disabled = false;
-
-      const container = document.getElementById("chatContainer");
-      container.classList.remove("show-sidebar");
-      container.classList.add("show-chat");
-    }
-
-    function closeChat() {
-      const container = document.getElementById("chatContainer");
-      container.classList.remove("show-chat");
-      container.classList.add("show-sidebar");
-
-      activeUser = null;
-      document.getElementById("messageInput").disabled = true;
-      document.getElementById("sendBtn").disabled = true;
-    }
+    
 </script>
 
 
