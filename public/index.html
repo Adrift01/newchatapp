@@ -639,9 +639,8 @@ function startChat() {
   socket.emit('new-user', currentUserInfo);
 
   document.getElementById('loginSection').style.display = 'none';
-  const container = document.getElementById("chatContainer");
-      container.classList.add("show-sidebar");
-      container.style.display = "flex";
+  document.getElementById('chatContainer').style.display = 'none';
+  
   document.getElementById('chatUserName').innerText = "Select a user";
 document.getElementById('chatUserInfo').innerText = "";
 
