@@ -257,7 +257,7 @@
     <button onclick="startChat()">Start Chat</button>
   </div>
 
-  <div class="container" id="chatContainer">
+  <div class="container show-sidebar" id="chatContainer">
     <div class="sidebar">
       <h3 id="onlineUserCount">Online Users (300+)</h3>
       <div id="filterButtons">
@@ -272,8 +272,7 @@
       <div class="chat-header">
         <span id="chatUserName">Chat</span>
         <div>
-  <button id="videoCallBtn">📹</button>
-
+          <button id="videoCallBtn">📹</button>
           <button onclick="closeChat()">✖</button>
         </div>
       </div>
@@ -281,561 +280,142 @@
       <div class="chat-input">
         <input type="text" id="messageInput" placeholder="Type a message..." disabled />
         <button class="image" onclick="triggerImageInput()">📷</button>
-
-<input type="file" id="imageInput" style="display:none;" onchange="handleImageUpload(event)">
-
+        <input type="file" id="imageInput" style="display:none;" onchange="handleImageUpload(event)">
         <button id="sendBtn" disabled>Send</button>
       </div>
     </div>
   </div>
-<script>
-  const countrySelect = document.getElementById("country");
-  const userList = document.getElementById("userList");
-  const chatHeader = document.getElementById('chatHeader');
-  const chatBody = document.getElementById('chatBody');
-  const messageInput = document.getElementById('messageInput');
-  const sendBtn = document.getElementById('sendBtn');
-  const imageInput = document.getElementById('imageInput');
-  const filterInboxButton = document.getElementById("filterInbox");
-  
-  
-  let allUsers = [];
-  let currentUserInfo = {};
-  let activeUser = null;
-  const messageStore = {};
-  let unreadMessages = {};
-  
-  async function loadCountries() {
-    const res = await fetch("https://restcountries.com/v3.1/all");
-    const countries = await res.json();
-    countries.sort((a, b) => a.name.common.localeCompare(b.name.common));
-    countries.forEach(c => {
-      const option = document.createElement("option");
-      option.value = c.cca2.toLowerCase();
-      option.text = c.name.common;
-      option.dataset.name = c.name.common;
-      countrySelect.appendChild(option);
-    });
-  }
 
-  loadCountries();
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
+    const userList = document.getElementById("userList");
+    const chatBody = document.getElementById("chatBody");
+    const messageInput = document.getElementById("messageInput");
+    const sendBtn = document.getElementById("sendBtn");
+    const chatContainer = document.getElementById("chatContainer");
+    const chatUserName = document.getElementById("chatUserName");
+    const imageInput = document.getElementById("imageInput");
 
-function appendMessage(sender, text, isYou = false) {
-  if (!messageStore[activeUser]) messageStore[activeUser] = [];
+    let currentUserInfo = {};
+    let activeUser = null;
+    let allUsers = [];
+    let messageStore = {};
 
-  // Store message
-  messageStore[activeUser].push(isYou ? `you:${text}` : text);
+    function startChat() {
+      const name = document.getElementById("username").value.trim();
+      const age = document.getElementById("age").value.trim();
+      const gender = document.getElementById("gender").value;
 
-  // Show in chat if active
-  if (activeUser) {
-    const div = document.createElement('div');
-    div.className = 'message';
-    div.classList.toggle('you', isYou);
-    div.textContent = isYou ? `You: ${text}` : `Stranger: ${text}`;
-    chatBody.appendChild(div);
-    chatBody.scrollTop = chatBody.scrollHeight;
-  }
-}
+      if (!name || !age || !gender) {
+        alert("Please fill all fields");
+        return;
+      }
 
-  
-  function renderMessages() {
-  chatBody.innerHTML = '';
-  const messages = messageStore[activeUser] || [];
-  messages.forEach(msg => {
-    const div = document.createElement('div');
-    div.className = 'message';
+      currentUserInfo = { name, age, gender };
+      document.getElementById("loginSection").style.display = "none";
+      chatContainer.style.display = "flex";
+      chatContainer.classList.add("show-sidebar");
 
-    if (msg.startsWith("img:")) {
-      const img = document.createElement('img');
-      img.src = msg.slice(4);
-      div.appendChild(img);
-    } else if (msg.startsWith("you:")) {
-      div.classList.add('you');
-      div.textContent = 'You: ' + msg.slice(4);
-    } else {
-      div.textContent = 'Stranger: ' + msg;
+      socket.emit("join", currentUserInfo);
     }
 
-    chatBody.appendChild(div);
-  });
-  chatBody.scrollTop = chatBody.scrollHeight;
-}
+    socket.on('user-list', (users) => {
+      allUsers = users.filter(u => u.name !== currentUserInfo.name);
+      renderUserList(allUsers);
+    });
 
-
-  function sendMessage() {
-  const text = messageInput.value.trim();
-  if (!text || !activeUser) return;
-
-  appendMessage('You', text, true);
-
-  // Send to server
-  socket.emit('send-message', {
-    to: activeUser,
-    message: text,
-  });
-
-  messageInput.value = '';
-}
-
-
-  function addEmoji() {
-    messageInput.value += "😊";
-  }
-
-  function sendGif() {
-    if (!activeUser) return;
-    fetch("https://api.giphy.com/v1/gifs/random?api_key=dc6zaTOxFJmzC&tag=funny")
-      .then(res => res.json())
-      .then(data => {
-        const gifUrl = data.data.images.fixed_height.url;
-        if (!messageStore[activeUser]) messageStore[activeUser] = [];
-        messageStore[activeUser].push(`img:${gifUrl}`);
-        renderMessages();
+    function renderUserList(users) {
+      userList.innerHTML = '';
+      users.forEach(user => {
+        const div = document.createElement("div");
+        div.className = "user";
+        div.textContent = user.name + ' (' + user.gender + ')';
+        div.onclick = () => openChat(user.name);
+        userList.appendChild(div);
       });
-  }
-
-imageInput.addEventListener('change', () => {
-  const file = imageInput.files[0];
-  if (!file || !activeUser) return;
-
-  const reader = new FileReader();
-  reader.onload = () => {
-    const base64Image = reader.result;
-
-    // Store locally
-    if (!messageStore[activeUser]) messageStore[activeUser] = [];
-    messageStore[activeUser].push(`img:${base64Image}`);
-    renderMessages();
-
-    // 🔥 Send to other user
-    socket.emit('send-message', {
-      to: activeUser,
-      message: `img:${base64Image}`,
-    });
-  };
-  reader.readAsDataURL(file);
-});
-
-</script>
-
-<script src="/socket.io/socket.io.js"></script>
-
-<script>
-  const socket = io();
-
-socket.on('user-list', (users) => {
-  // Exclude the current user from the list
-  allUsers = users.filter(user => user.name !== currentUserInfo.name);
-  renderUserList(allUsers);
-});
-
-function renderUserList(users) {
-  userList.innerHTML = ''; // Clear the list first
-
-  users.forEach(user => {
-    const userDiv = document.createElement('div');
-    userDiv.className = `user ${user.gender.toLowerCase()}`;
-    userDiv.dataset.username = user.name;
-
-    // ✅ Add "unread" dot if there's an unread message
-    if (unreadMessages[user.name]) {
-      userDiv.classList.add('unread');
     }
 
-    userDiv.innerHTML = `
-      <div class="user-info">
-        <strong>${user.name}</strong>
-        <small>${user.age} yrs, ${user.region}, ${user.countryName}</small>
-      </div>
-      <img src="https://flagcdn.com/${user.countryCode}.svg" class="flag" />
-    `;
+    function openChat(username) {
+      activeUser = username;
+      chatUserName.textContent = username;
+      chatContainer.classList.remove("show-sidebar");
+      chatContainer.classList.add("show-chat");
 
-    // ✅ When user is clicked
-    userDiv.addEventListener('click', () => {
-      // Remove "active" class from all
-      document.querySelectorAll('.user').forEach(u => u.classList.remove('active'));
-      userDiv.classList.add('active');
-
-      // ✅ Reset unread status
-      userDiv.classList.remove('unread');
-      unreadMessages[user.name] = false;
-      updateInboxBadge();
-
-      activeUser = user.name;
       messageInput.disabled = false;
       sendBtn.disabled = false;
 
-      document.getElementById('chatUserName').innerText = user.name;
-      document.getElementById('chatUserInfo').innerText = `${user.gender}, ${user.age} yrs`;
-      document.getElementById('videoCallBtn').style.display = 'inline-block';
-
       renderMessages();
-    });
-
-    userList.appendChild(userDiv);
-  });
-}
-
-  document.getElementById("filterAll").addEventListener("click", () => {
-  renderUserList(allUsers);
-});
-
-document.getElementById("filterMale").addEventListener("click", () => {
-  renderUserList(allUsers.filter(user => user.gender === "Male"));
-});
-
-document.getElementById("filterFemale").addEventListener("click", () => {
-  renderUserList(allUsers.filter(user => user.gender === "Female"));
-});
-
-  // ata new delete korle akhan theke korbo
-  function handleReceivedMessage(from, message) {
-    if (!messageStore[from]) {
-      messageStore[from] = [];
-    }
-
-    // Store message
-    messageStore[from].push(message);
-
-    // If the user is not active and hasn't seen the message yet, mark as unread
-    if (activeUser !== from) {
-      unreadMessages[from] = true; // Mark this user as having unread messages
-    }
-
-    // Render messages (this will show them if activeUser matches the from)
-    if (activeUser === from) {
-      renderMessages();
-    }
-    renderUserList(allUsers); // Re-render the user list to update unread message indicator
-  }
-
-  socket.on('receive-message', ({ from, message }) => {
-    handleReceivedMessage(from, message);
-    updateInboxBadge();
-  });
-
-  // Render the user list (including unread message indicator)
-  
-
-  // Filter by Inbox (only users with unread messages)
-  filterInboxButton.addEventListener('click', () => {
-    const inboxUsers = allUsers.filter(user => unreadMessages[user.name]);
-    renderUserList(inboxUsers);
-  });
-
-  // Filter all users
-  document.getElementById("filterAll").addEventListener("click", () => {
-    renderUserList(allUsers);
-  });
-
-  // Filter male users
-  document.getElementById("filterMale").addEventListener("click", () => {
-    renderUserList(allUsers.filter(user => user.gender === "Male"));
-  });
-
-  // Filter female users
-  document.getElementById("filterFemale").addEventListener("click", () => {
-    renderUserList(allUsers.filter(user => user.gender === "Female"));
-  }); // ai porjonto
-
-  function updateInboxBadge() {
-  const unreadUserCount = Object.keys(unreadMessages).filter(username => unreadMessages[username]).length;
-  const badge = document.getElementById("inboxBadge");
-
-  if (unreadUserCount > 0) {
-    badge.style.display = "inline-block";
-    badge.textContent = unreadUserCount;
-  } else {
-    badge.style.display = "none";
-  }
-}
-
-
-
-</script>
-    <script>
-  function updateOnlineCount() {
-    const min = 300;
-    const max = 900;
-    const randomCount = Math.floor(Math.random() * (max - min + 1)) + min;
-    document.getElementById("onlineUserCount").innerText = `Online Users (${randomCount} )`;
-    
-    // Repeat every 15-20 seconds
-    const nextUpdate = Math.random() * (20000 - 15000) + 15000; // ms
-    setTimeout(updateOnlineCount, nextUpdate);
-  }
-
-  // Start the loop
-  updateOnlineCount();
-</script>
-<script>
-const botNames = {
-  male: ["Ravi", "Amit", "Rahul", "Hasan", "Arif", "Raj", "Sumon", "Kabir", "Anik", "Neel", "Tomal", "Abir", "Tareq", "Firoz khan", "Aniket"],
-  female: ["Priya", "Anita", "Fatema", "Nusrat", "Lipi", "Meera", "Nishi", "Joya", "Salma", "Rima", "Sathi", "Disha", "Saniya", "Srity"]
-};
-
-function getRandomItem(arr) {
-  return arr[Math.floor(Math.random() * arr.length)];
-}
-
-// ✅ Allow reuse of names after all unique names are used once
-function getRandomUniqueName(nameList, usedNames) {
-  const available = nameList.filter(name => !usedNames.has(name));
-  if (available.length === 0) {
-    return getRandomItem(nameList); // allow reuse
-  }
-  const name = getRandomItem(available);
-  usedNames.add(name);
-  return name;
-}
-
-function generateBots() {
-  const bots = [];
-  const usedNames = new Set();
-
-  // Male bots
-  for (let i = 0; i < 30; i++) {
-    const name = getRandomUniqueName(botNames.male, usedNames);
-    bots.push({
-      name,
-      age: Math.floor(Math.random() * (35 - 21 + 1)) + 21,
-      gender: "Male",
-      region: "Delhi",
-      countryCode: "in",
-      countryName: "India"
-    });
-  }
-
-  for (let i = 0; i < 22; i++) {
-    const name = getRandomUniqueName(botNames.male, usedNames);
-    bots.push({
-      name,
-      age: Math.floor(Math.random() * (29 - 22 + 1)) + 22,
-      gender: "Male",
-      region: "Dhaka",
-      countryCode: "bd",
-      countryName: "Bangladesh"
-    });
-  }
-
-  for (let i = 0; i < 18; i++) {
-    const name = getRandomUniqueName(botNames.male, usedNames);
-    bots.push({
-      name,
-      age: Math.floor(Math.random() * 15) + 20,
-      gender: "Male",
-      region: "City" + i,
-      countryCode: getRandomItem(["us", "gb", "ca", "de", "fr", "au"]),
-      countryName: "Randomland"
-    });
-  }
-
-  // Female bots
-  for (let i = 0; i < 10; i++) {
-    const name = getRandomUniqueName(botNames.female, usedNames);
-    bots.push({
-      name,
-      age: Math.floor(Math.random() * (29 - 19 + 1)) + 19,
-      gender: "Female",
-      region: "Dhaka",
-      countryCode: "bd",
-      countryName: "Bangladesh"
-    });
-  }
-
-  for (let i = 0; i < 20; i++) {
-    const name = getRandomUniqueName(botNames.female, usedNames);
-    bots.push({
-      name,
-      age: Math.floor(Math.random() * (29 - 19 + 1)) + 19,
-      gender: "Female",
-      region: "Mumbai",
-      countryCode: "in",
-      countryName: "India"
-    });
-  }
-
-  for (let i = 0; i < 9; i++) {
-    const name = getRandomUniqueName(botNames.female, usedNames);
-    bots.push({
-      name,
-      age: Math.floor(Math.random() * 15) + 20,
-      gender: "Female",
-      region: "City" + i,
-      countryCode: getRandomItem(["us", "gb", "ca", "de", "fr", "au"]),
-      countryName: "Randomland"
-    });
-  }
-
-  return bots;
-}
-
-const allBotUsers = generateBots();
-let onlineBots = [];
-
-function updateBotList() {
-  const count = Math.floor(Math.random() * (90 - 50 + 1)) + 50;
-  onlineBots = [...allBotUsers].sort(() => 0.5 - Math.random()).slice(0, count);
-
-  const finalList = [...allUsers, ...onlineBots];  // Assume allUsers is defined elsewhere
-  allUsers = finalList;
-  
-  renderUserList(finalList);
-
-  const nextUpdate = Math.random() * (15000 - 8000) + 8000;
-  setTimeout(updateBotList, nextUpdate);
-}
-
-function startChat() {
-  const name = document.getElementById('username').value.trim();
-  const age = document.getElementById('age').value.trim();
-  const gender = document.getElementById('gender').value;
-
-  if (!name || !age || !gender) {
-    alert("Please fill in Name, Age, and Gender.");
-    return;
-  }
-
-  currentUserInfo = {
-    name,
-    age,
-    gender,
-  };
-
-  socket.emit('new-user', currentUserInfo);
-
-  document.getElementById("loginSection").style.display = "none";
-      const container = document.getElementById("chatContainer");
-      container.classList.add("show-sidebar");
-      container.style.display = "flex";
-
-  document.getElementById('chatUserName').innerText = "Select a user";
-document.getElementById('chatUserInfo').innerText = "";
-
-  updateBotList();
-}
-
-
-</script>
-
-  <script src="https://cdn.adsgram.io/ads.js"></script>
-<script>
-  let AdController;
-
-  // পেজ লোড হলে অ্যাড ইনিশিয়ালাইজ করো
-  window.onload = async function () {
-    try {
-      AdController = window.Adsgram.init({
-        blockId: "int-10200" // এখানে তোমার আসল block ID বসাও
-      });
-    } catch (err) {
-      console.log("Ad init failed:", err);
-    }
-  };
-
-  // এই ফাংশনটা বাটনে ক্লিক করলে কল হবে
-  async function sendThenShowAd() {
-    // প্রথমে মেসেজ পাঠাও
-    sendMessage();
-
-    // তারপর অ্যাড দেখাও
-    try {
-      if (AdController) {
-        await AdController.show(); // অ্যাড দেখাবে
-      }
-    } catch (err) {
-      console.log("Ad failed to show:", err);
-    }
-  }
-
-  // তোর আসল send() ফাংশন
-  function send() {
-    console.log("Message sent!");
-    // এখানে তুই যেটা মেসেজ সেন্ড করিস বা সার্ভারে পাঠাস, সেটা বসাবি
-    // উদাহরণ: socket.emit('send-message', { to: 'User', message: 'Hello!' });
-  }
-</script>
-
-  <script>
-  // Image input trigger function
-  function triggerImageInput() {
-    document.getElementById('imageInput').click();
-  }
-
-  // Handle the image upload (you can process the image or preview it here)
-  function handleImageUpload(event) {
-    const file = event.target.files[0];
-    if (file) {
-      console.log('Image selected:', file.name);
-      // You can show a preview or send the image to a server if needed
-    }
-  }
-
-  // Rewarded interstitial ad logic
-  async function showAdAndReward() {
-    // First, trigger the ad
-    try {
-      await show_9229076();  // Show ad
-      alert('You have seen an ad!');
-    } catch (err) {
-      console.log('Ad failed:', err);
-    }
-  }
-
-  // Ad and image upload combined action
-  async function triggerImageAndShowAd() {
-    // Trigger the image input and then show the ad after 1 second
-    triggerImageInput();
-    setTimeout(() => {
-      showAdAndReward();  // Show the ad after image input trigger
-    }, 1000); // 1 second delay for smoother flow (can be adjusted)
-  }
-    
-</script>
-  <script>function filterUsers(type) {
-      const userList = document.getElementById("userList");
-      userList.innerHTML = "";
-
-      const filtered = allUsers.filter(user => {
-        if (type === "all") return true;
-        if (type === "male") return user.gender === "male";
-        if (type === "female") return user.gender === "female";
-        if (type === "inbox") return user.hasInbox;
-        return true;
-      });
-
-      filtered.forEach(user => {
-        const userDiv = document.createElement("div");
-        userDiv.textContent = user.name;
-        userDiv.className = "user";
-        userDiv.addEventListener("click", () => openChatWith(user.name));
-        userList.appendChild(userDiv);
-      });
-    }
-
-    function openChatWith(userId) {
-      activeUser = userId;
-      document.getElementById("chatUserName").textContent = userId;
-      document.getElementById("messageInput").disabled = false;
-      document.getElementById("sendBtn").disabled = false;
-
-      const container = document.getElementById("chatContainer");
-      container.classList.remove("show-sidebar");
-      container.classList.add("show-chat");
     }
 
     function closeChat() {
-      const container = document.getElementById("chatContainer");
-      container.classList.remove("show-chat");
-      container.classList.add("show-sidebar");
-
       activeUser = null;
-      document.getElementById("messageInput").disabled = true;
-      document.getElementById("sendBtn").disabled = true;
-    }</script>
-  
+      chatContainer.classList.remove("show-chat");
+      chatContainer.classList.add("show-sidebar");
+      messageInput.disabled = true;
+      sendBtn.disabled = true;
+    }
 
+    function renderMessages() {
+      chatBody.innerHTML = '';
+      const messages = messageStore[activeUser] || [];
+      messages.forEach(msg => {
+        const div = document.createElement("div");
+        div.className = "message";
 
+        if (msg.startsWith("img:")) {
+          const img = document.createElement("img");
+          img.src = msg.slice(4);
+          div.appendChild(img);
+        } else if (msg.startsWith("you:")) {
+          div.classList.add("you");
+          div.textContent = "You: " + msg.slice(4);
+        } else {
+          div.textContent = "Stranger: " + msg;
+        }
 
+        chatBody.appendChild(div);
+      });
+      chatBody.scrollTop = chatBody.scrollHeight;
+    }
+
+    sendBtn.addEventListener("click", () => {
+      const msg = messageInput.value.trim();
+      if (!msg || !activeUser) return;
+      if (!messageStore[activeUser]) messageStore[activeUser] = [];
+      messageStore[activeUser].push("you:" + msg);
+      socket.emit("send-message", { to: activeUser, message: msg });
+      renderMessages();
+      messageInput.value = '';
+    });
+
+    socket.on("receive-message", ({ from, message }) => {
+      if (!messageStore[from]) messageStore[from] = [];
+      messageStore[from].push(message);
+
+      if (activeUser === from) {
+        renderMessages();
+      }
+    });
+
+    function triggerImageInput() {
+      imageInput.click();
+    }
+
+    function handleImageUpload(event) {
+      const file = event.target.files[0];
+      if (!file || !activeUser) return;
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        const base64 = reader.result;
+        if (!messageStore[activeUser]) messageStore[activeUser] = [];
+        messageStore[activeUser].push("img:" + base64);
+        socket.emit("send-message", { to: activeUser, message: "img:" + base64 });
+        renderMessages();
+      };
+      reader.readAsDataURL(file);
+    }
+  </script>
 </body>
 </html>
